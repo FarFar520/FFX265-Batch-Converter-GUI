@@ -465,6 +465,8 @@ namespace FFX265_Batch_Converter {
 
                 if (userX265Params.keyintSet)
                     keyint = ffmpegParams.gop;
+                else if (userX265Params.keyintMax)
+                    keyint = int.MaxValue;  //keyint = -1;// ffmpeg -g 参数无法传入-1；
                 else
                     keyint = (int)Math.Ceiling(tbr_out * ffmpegParams.gop_sec);
 

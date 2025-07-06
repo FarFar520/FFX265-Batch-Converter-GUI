@@ -423,8 +423,8 @@ namespace FFX265_Batch_Converter {
 
             userX265Params.frame_dup = checkBox_frame_dup.Checked;
 
-            userX265Params.keyintMax = checkBox_keyintMax.Checked;
-            userX265Params.keyintSet = !checkBox_keyintMax.Checked;
+            userX265Params.keyintMax = checkBox_keyintMax.CheckState == CheckState.Checked;
+            userX265Params.keyintSet = checkBox_keyintMax.CheckState == CheckState.Unchecked ;
 
             userX265Params.analyze_src_pics = checkBox_analyze_src_pics.Checked;
 
