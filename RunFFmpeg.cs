@@ -74,12 +74,12 @@ namespace FFX265_Batch_Converter {
                 if (K > 4.32) {
                     progressive = $"{f输出长边 / 960:F1}K";
                 } else {
-                    if (f输出长边 >= 3840) progressive = "2160p";
-                    else if (f输出长边 >= 2560) progressive = "1440p";
-                    else if (f输出长边 >= 1920) progressive = "1080p";
-                    else if (f输出长边 >= 1440) progressive = "960p";
-                    else if (f输出长边 >= 1280) progressive = "720p";
-                    else if (f输出长边 >= 960) progressive = "640p";
+                    if (f输出长边 >= 3840 - 128) progressive = "2160p";
+                    else if (f输出长边 >= 2560 - 88) progressive = "1440p";
+                    else if (f输出长边 >= 1920 - 64) progressive = "1080p";
+                    else if (f输出长边 >= 1440 - 48) progressive = "960p";
+                    else if (f输出长边 >= 1280 - 40) progressive = "720p";
+                    else if (f输出长边 >= 960 - 32) progressive = "640p";
                     else if (f输出长边 >= 640) progressive = "480p";
                     else if (f输出长边 >= 480) progressive = "320p";
                     else if (f输出长边 >= 320) progressive = "240p";
@@ -327,9 +327,10 @@ namespace FFX265_Batch_Converter {
                 b发生自动剪裁 = fx扫描黑边(out str剪裁参数);
             }
 
-            if (b发生自动剪裁 || ffmpegParams.set_Scale) {//先进入缩放函数，获取 outW、outH结果
-                b发生缩放 = ffmpegParams.scale(inWidth, inHeight, darW, darH, ref outWidth, ref outHeight, out str缩放参数);
-            }
+            //if (b发生自动剪裁 || ffmpegParams.set_Scale) {//先进入缩放函数，获取 outW、outH结果
+            b发生缩放 = ffmpegParams.scale(inWidth, inHeight, darW, darH, ref outWidth, ref outHeight, out str缩放参数);
+            //}
+
             if (cropWidth > 0 && cropHeight > 0)
                 b畸变 = (1 - Math.Abs(outWidth / outHeight - cropWidth / cropHeight) < FFmpegParams.f看不出畸变);
             else

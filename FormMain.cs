@@ -424,7 +424,7 @@ namespace FFX265_Batch_Converter {
             userX265Params.frame_dup = checkBox_frame_dup.Checked;
 
             userX265Params.keyintMax = checkBox_keyintMax.CheckState == CheckState.Checked;
-            userX265Params.keyintSet = checkBox_keyintMax.CheckState == CheckState.Unchecked ;
+            userX265Params.keyintSet = checkBox_keyintMax.CheckState == CheckState.Unchecked;
 
             userX265Params.analyze_src_pics = checkBox_analyze_src_pics.Checked;
 
@@ -893,17 +893,17 @@ namespace FFX265_Batch_Converter {
                 label_scale.Text = "↓3840×2160p";
                 toolTipList.SetToolTip(label_scale, "2160p(只缩小，不放大)");
             } else if (iscale == num++) {
-                label_scale.Text = "↓长边1920px";
-                toolTipList.SetToolTip(label_scale, "2K（只缩小，不放大）");
+                label_scale.Text = "↕长边1920px";
+                toolTipList.SetToolTip(label_scale, "2K");
             } else if (iscale == num++) {
-                label_scale.Text = "↓长边2560px";
-                toolTipList.SetToolTip(label_scale, "2.5K（只缩小，不放大）");
+                label_scale.Text = "↕长边2560px";
+                toolTipList.SetToolTip(label_scale, "2.5K");
             } else if (iscale == num++) {
-                label_scale.Text = "↓长边3840px";
-                toolTipList.SetToolTip(label_scale, "4K（只缩小，不放大）");
+                label_scale.Text = "↕长边3840px";
+                toolTipList.SetToolTip(label_scale, "4K");
             } else if (iscale == num++) {
-                label_scale.Text = "↓长边1280px";
-                toolTipList.SetToolTip(label_scale, "1K（只缩小，不放大）");
+                label_scale.Text = "↕长边1280px";
+                toolTipList.SetToolTip(label_scale, "1K");
             }
 
             if (thEncoding.IsAlive && ffmpegParams.scaleto != label_scale.Text) {
@@ -928,13 +928,13 @@ namespace FFX265_Batch_Converter {
             if (e.KeyChar == 13) {
                 if (int.TryParse(Setting.regexD.Match(toolStripTextBox长边像素.Text).Value, out int pix)) {
                     if (pix >= X265Params.MIN_PIX) {
-                        label_scale.Text = $"↓长边{pix}px";
+                        label_scale.Text = $"↕长边{pix}px";
                         toolTipList.SetToolTip(label_scale, $"长边像素{pix}（Max(w,h)={pix})");
                     }
                 }
             } else if (e.KeyChar == 32) {
                 toolStripTextBox长边像素.Text = "1024";
-                label_scale.Text = $"↓长边{1024}px";
+                label_scale.Text = $"↕长边{1024}px";
                 toolTipList.SetToolTip(label_scale, $"长边像素{1024}（Max(w,h)={1024})");
             }
         }
@@ -1016,7 +1016,7 @@ namespace FFX265_Batch_Converter {
 
                     checkBox_keyintMax.Text = "快进间隔(秒)";
                     checkBox_keyintMax.ForeColor = Color.Black;
-                    toolTipList.SetToolTip(checkBox_keyintMax, "--gop=帧");
+                    toolTipList.SetToolTip(checkBox_keyintMax, "--gop=输出帧率×秒");
 
                     numericUpDown_gop.Visible = true;
                 } else {

@@ -117,36 +117,29 @@ namespace FFX265_Batch_Converter {
         }
 
         void third_fps_bframes(double fps, ref StringBuilder stringBuilder) {
-            int third = (int)(Math.Round(fps / 3));
-            if (third > 16) third = 16;
-            else if (mcstf & third < 5) third = 5;
+            if (bframes_thirdfps) {//自动调整B帧数量功能。
+                int third = (int)(Math.Round(fps / 3));
+                if (third > 16) third = 16;
+                else if (mcstf && third < 5) third = 5;
 
-            if (bframes_thirdfps) {
                 stringBuilder.Append(":weightb=1");
                 if (third > def_bframes) {
                     stringBuilder.Append(":bframes=").Append(third);
                 }
             } else if (mcstf) {
-                stringBuilder.Append(":bframes=5");
+                if (def_bframes < 5)
+                    stringBuilder.Append(":bframes=5");//空间降噪滤镜要求最低5个B帧。
             }
         }
 
         void qp_range(float crf, ref StringBuilder stringBuilder) {
             if (qp_min_max) {
-                if (_qp_min > 0) {
-                    stringBuilder.Append(":qpmin=");
-                    if (_qp_min <= crf)
-                        stringBuilder.Append(_qp_min);
-                    else
-                        stringBuilder.Append(crf);
+                if (_qp_min >= 0) {
+                    stringBuilder.Append(":qpmin=").Append(_qp_min < crf ? _qp_min : crf);
                 }
 
-                if (_qp_max < 69) {
-                    stringBuilder.Append(":qpmax=");
-                    if (_qp_max > -crf)
-                        stringBuilder.Append(_qp_max);
-                    else
-                        stringBuilder.Append(crf);
+                if (_qp_max > 0) {
+                    stringBuilder.Append(":qpmax=").Append(_qp_max > crf ? _qp_max : crf);
                 }
             }
         }
@@ -173,8 +166,8 @@ namespace FFX265_Batch_Converter {
 
             third_fps_bframes(tbr_out, ref stringBuilder);//连续B帧数按视频帧的三分之一量来
 
-            if (rect) stringBuilder.Append(":rect=1");
-            if (amp) stringBuilder.Append(":amp=1");
+            if (rect) stringBuilder.Append(":rect=1");//增压参数，没做设置
+            if (amp) stringBuilder.Append(":amp=1");//预设档位有，跳过手动指定
 
             //if (frame_dup) stringBuilder.Append(":frame-dup=1");//流媒体相关，自动丢弃帧，暂时没使用选项
 

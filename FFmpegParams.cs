@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Deployment.Internal;
 
 namespace FFX265_Batch_Converter {
     internal class FFmpegParams {
@@ -38,56 +39,69 @@ namespace FFX265_Batch_Converter {
             flag = false;
             str = string.Empty;
             if (scaleto == "↓50%") {
-                str = "scale=iw*0.5:ih*0.5:flags=bicubic";
                 outWidth = display_Width / 2; outHeight /= 2;
+                if (outWidth % 4 == 0) {
+                    str = "scale=iw*0.5:-4:flags=bicubic";
+                } else {
+                    outWidth -= (outWidth % 4);
+                    outHeight -= (outHeight % 4);
+                    str = $"scale={outWidth}:{outHeight}:flags=bicubic";
+                }
             } else if (scaleto == "↓25%") {
-                str = "scale=iw*0.25:ih*0.25:flags=bicubic";
                 outWidth = display_Width / 4; outHeight /= 4;
+                if (outWidth % 2 == 0) {
+                    str = "scale=iw*0.25:-2:flags=bicubic";
+                } else {
+                    outWidth -= (outWidth % 2);
+                    outHeight -= (outHeight % 2);
+                    str = $"scale={outWidth}:{outHeight}:flags=bicubic";
+                }
+
             } else if (scaleto == "↓1280×720p") {
                 flag = true;
-                if (display_Width > 1280 - 16) {
+                if (display_Width > 1280 - 16 && display_Width >= outHeight) {
                     str = "scale=1280:-4";
                     outHeight = 1280 / display_Width * outHeight;
                     outWidth = 1280;
-                } else if (outHeight > 1280 - 16) {
+                } else if (outHeight > 1280 - 16 && outHeight >= display_Width) {
                     str = "scale=-4:1280";
                     outWidth = 1280 / outHeight * display_Width;
                     outHeight = 1280;
                 }
             } else if (scaleto == "↓1920×1080p") {
                 flag = true;
-                if (display_Width > 1920 - 32) {
+                if (display_Width > 1920 - 32 && display_Width >= outHeight) {
                     str = "scale=1920:-4";
                     outHeight = 1920 / display_Width * outHeight;
                     outWidth = 1920;
-                } else if (outHeight > 1920 - 32) {
+                } else if (outHeight > 1920 - 32 && outHeight >= display_Width) {
                     outWidth = 1920 / outHeight * display_Width;
                     outHeight = 1920;
                     str = "scale=-4:1920";
                 }
             } else if (scaleto == "↓2560×1440p") {
                 flag = true;
-                if (display_Width > 2560 - 48) {
+                if (display_Width > 2560 - 48 && display_Width >= outHeight) {
                     str = "scale=2560:-4";
                     outHeight = 2560 / display_Width * outHeight;
                     outWidth = 2560;
-                } else if (outHeight > 2560 - 48) {
+                } else if (outHeight > 2560 - 48 && outHeight >= display_Width) {
                     str = "scale=-4:2560";
                     outWidth = 2560 / outHeight * display_Width;
                     outHeight = 2560;
                 }
             } else if (scaleto == "↓3840×2160p") {
                 flag = true;
-                if (display_Width > 3840 - 64) {
+                if (display_Width > 3840 - 64 && display_Width >= outHeight) {
                     str = "scale=3840:-4";
                     outHeight = 3840 / display_Width * outHeight;
                     outWidth = 3840;
-                } else if (outHeight > 3840 - 64) {
+                } else if (outHeight > 3840 - 64 && outHeight >= display_Width) {
                     str = "scale=-4:3840";
                     outWidth = 3840 / outHeight * outHeight;
                     outHeight = 3840;
                 }
-            } else if (scaleto.StartsWith("↓长边")) {
+            } else if (scaleto.StartsWith("↕长边")) {
                 if (int.TryParse(Setting.regexD.Match(scaleto).Value, out int max)) {
                     if (max >= X265Params.MIN_PIX) {
                         if (display_Width >= outHeight) {//正方形视频当宽大于高处理
@@ -135,6 +149,9 @@ namespace FFX265_Batch_Converter {
                 flag = true;
                 if (scaleto == "100%") {
                     if (Setting.b校正为DAR比例) {
+                        out_display_Width -= (out_display_Width % 4);
+                        out_Display_Height -= (out_Display_Height % 4);//压最小4×4块
+
                         str = $"scale={out_display_Width}:{out_Display_Height}";
                         outWidth = out_display_Width;
                         outHeight = out_Display_Height;
@@ -146,53 +163,54 @@ namespace FFX265_Batch_Converter {
                         } else if (scaleto == "↓25%") {
                             out_display_Width /= 4; out_Display_Height /= 4;
                         } else if (scaleto == "↓1280×720p") {
-                            if (out_display_Width > 1280 - 16) {//横屏
+                            if (out_display_Width > 1280 - 16 && out_display_Width >= out_Display_Height) {//横屏
                                 out_Display_Height = out_Display_Height * (1280 / out_display_Width);//以长边为准计算输出视频高度。
                                 out_display_Width = 1280;
 
-                            } else if (out_Display_Height > 1280 - 16) {
+                            } else if (out_Display_Height > 1280 - 16 && out_Display_Height >= out_display_Width) {
                                 out_display_Width = out_display_Width * (1280 / out_Display_Height);//以长边为准计算输出视频高度。
                                 out_Display_Height = 1280;
                             }
                         } else if (scaleto == "↓1920×1080p") {
-                            if (out_display_Width > 1920 - 32) {//横屏
+                            if (out_display_Width > 1920 - 32 && out_display_Width >= out_Display_Height) {//横屏
                                 out_Display_Height = out_Display_Height * (1920 / out_display_Width);//以长边为准计算输出视频高度。
                                 out_display_Width = 1920;
-                            } else if (out_Display_Height > 1920 - 32) {
+                            } else if (out_Display_Height > 1920 - 32 && out_Display_Height >= out_display_Width) {
                                 out_display_Width = out_display_Width * (1920 / out_Display_Height);//以长边为准计算输出视频高度。
                                 out_Display_Height = 1920;
                             }
                         } else if (scaleto == "↓2560×1440p") {
-                            if (out_display_Width > 2560 - 48) {//横屏
+                            if (out_display_Width > 2560 - 48 && out_display_Width >= out_Display_Height) {//横屏
                                 out_Display_Height = out_Display_Height * (2560 / out_display_Width);//以长边为准计算输出视频高度。
                                 out_display_Width = 2560;
-                            } else if (out_Display_Height > 2560 - 48) {
+                            } else if (out_Display_Height > 2560 - 48 && out_Display_Height >= out_display_Width) {
                                 out_display_Width = out_display_Width * (2560 / out_Display_Height);//以长边为准计算输出视频高度。
                                 out_Display_Height = 2560;
                             }
                         } else if (scaleto == "↓3840×2160p") {
-                            if (out_display_Width > 3840 - 64) {//横屏
+                            if (out_display_Width > 3840 - 64 && out_display_Width >= out_Display_Height) {//横屏
                                 out_Display_Height = out_Display_Height * (3840 / out_display_Width);//以长边为准计算输出视频高度。
                                 out_display_Width = 3840;
-                            } else if (out_Display_Height > 3840 - 64) {
+                            } else if (out_Display_Height > 3840 - 64 && out_Display_Height >= out_display_Width) {
                                 out_display_Width = out_display_Width * (3840 / out_Display_Height);//以长边为准计算输出视频高度。
                                 out_Display_Height = 3840;
                             }
-                        } else if (scaleto.StartsWith("↓长边")) {
+                        } else if (scaleto.StartsWith("↕长边")) {
                             if (int.TryParse(Setting.regexD.Match(scaleto).Value, out int max)) {
                                 if (max >= X265Params.MIN_PIX) {
                                     if (out_display_Width >= out_Display_Height) {//正方形视频当宽大于高处理
-                                        if (max > out_display_Width) {
-                                            out_display_Width = max;
-                                            out_Display_Height *= (max / out_display_Width);
-                                        }
+
+                                        out_display_Width = max;
+                                        out_Display_Height *= (max / out_display_Width);
+
                                     } else {
-                                        if (max > out_Display_Height) {
-                                            out_Display_Height = max;
-                                            out_display_Width *= (max / out_Display_Height);
-                                        }
+
+                                        out_Display_Height = max;
+                                        out_display_Width *= (max / out_Display_Height);
+
                                     }
                                 }
+
                             }
                         }
 
@@ -216,6 +234,9 @@ namespace FFX265_Batch_Converter {
                 }
             } else {
                 if (scaleto == "100%") {
+                    inWidth -= (inWidth % 2);//切割快最小2×2
+                    inHeight -= (inHeight % 2);
+
                     if (outHeight == inHeight && outWidth == inWidth) return false;
                     if (outHeight / inHeight >= f看不出畸变 && outWidth / inWidth >= f看不出畸变) {//剪裁量较小时（编码器引起的微量黑边），缩放回原始比例
                         flag = true;
