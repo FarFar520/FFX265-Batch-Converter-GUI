@@ -83,6 +83,7 @@
             this.checkBox_nr_intra = new System.Windows.Forms.CheckBox();
             this.checkBox_mcstf = new System.Windows.Forms.CheckBox();
             this.panel_Search = new System.Windows.Forms.Panel();
+            this.checkBox_rect_amp = new System.Windows.Forms.CheckBox();
             this.checkBox_umh = new System.Windows.Forms.CheckBox();
             this.checkBox_analyze_src_pics = new System.Windows.Forms.CheckBox();
             this.checkBox_single_sei = new System.Windows.Forms.CheckBox();
@@ -857,6 +858,7 @@
             // panel_Search
             // 
             this.panel_Search.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel_Search.Controls.Add(this.checkBox_rect_amp);
             this.panel_Search.Controls.Add(this.checkBox_umh);
             this.panel_Search.Controls.Add(this.checkBox_analyze_src_pics);
             this.panel_Search.Controls.Add(this.checkBox_single_sei);
@@ -865,6 +867,18 @@
             this.panel_Search.Name = "panel_Search";
             this.panel_Search.Size = new System.Drawing.Size(479, 21);
             this.panel_Search.TabIndex = 2;
+            // 
+            // checkBox_rect_amp
+            // 
+            this.checkBox_rect_amp.AutoSize = true;
+            this.checkBox_rect_amp.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_rect_amp.Location = new System.Drawing.Point(321, 0);
+            this.checkBox_rect_amp.Name = "checkBox_rect_amp";
+            this.checkBox_rect_amp.Size = new System.Drawing.Size(135, 21);
+            this.checkBox_rect_amp.TabIndex = 3;
+            this.checkBox_rect_amp.Text = "矩形非对称运动搜索";
+            this.toolTipList.SetToolTip(this.checkBox_rect_amp, "--rect --amp");
+            this.checkBox_rect_amp.UseVisualStyleBackColor = true;
             // 
             // checkBox_umh
             // 
@@ -1002,10 +1016,10 @@
             "placebo（最慢）",
             "copy（复制视频流）",
             "ultrafast（最快）",
-            "superfast（超级快）",
-            "veryfast（非常快）",
-            "faster（更加一些）",
-            "fast（稍微快一些）"});
+            "superfast（五速）",
+            "veryfast（三速）",
+            "faster（二速）",
+            "fast（单速）"});
             this.comboBoxPresets.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.comboBoxPresets.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxPresets.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -1416,6 +1430,7 @@
         private System.Windows.Forms.TextBox textBox_add_lavfi;
         private System.Windows.Forms.CheckBox checkBox_lockedSet;
         private System.Windows.Forms.Panel panel_AppSet;
+        private System.Windows.Forms.CheckBox checkBox_rect_amp;
     }
 }
 

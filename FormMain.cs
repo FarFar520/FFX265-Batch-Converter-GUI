@@ -429,7 +429,7 @@ namespace FFX265_Batch_Converter {
             userX265Params.analyze_src_pics = checkBox_analyze_src_pics.Checked;
 
             userX265Params.umh = checkBox_umh.Checked;
-
+            userX265Params.rect = userX265Params.amp = checkBox_rect_amp.Checked;
             userX265Params.rc_lookahead_halfkeyint = checkBox_rc_lookahead_halfkeyint.Checked;
 
             userX265Params.hrd = checkBox_hrd.Checked;
@@ -648,6 +648,7 @@ namespace FFX265_Batch_Converter {
                     panel_Params.Visible = false;
             }
 
+            checkBox_rect_amp.Checked = show;
             checkBox_aq_mode.Checked = show;
             checkBox_analyze_src_pics.Checked = show;
             checkBox_umh.Checked = show;
