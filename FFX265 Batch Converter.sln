@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFX265 Batch Converter", "FFX265 Batch Converter.csproj", "{69E0AF72-79F4-4187-BCDF-044708E200DE}"
 EndProject
@@ -13,6 +13,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		远程101T|Any CPU = 远程101T|Any CPU
+		远程101T|x64 = 远程101T|x64
+		远程101T|x86 = 远程101T|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{69E0AF72-79F4-4187-BCDF-044708E200DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -27,8 +30,17 @@ Global
 		{69E0AF72-79F4-4187-BCDF-044708E200DE}.Release|x64.Build.0 = Release|x64
 		{69E0AF72-79F4-4187-BCDF-044708E200DE}.Release|x86.ActiveCfg = Release|x86
 		{69E0AF72-79F4-4187-BCDF-044708E200DE}.Release|x86.Build.0 = Release|x86
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|Any CPU.ActiveCfg = 远程101T|Any CPU
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|Any CPU.Build.0 = 远程101T|Any CPU
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|x64.ActiveCfg = 远程101T|x64
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|x64.Build.0 = 远程101T|x64
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|x86.ActiveCfg = 远程101T|x86
+		{69E0AF72-79F4-4187-BCDF-044708E200DE}.远程101T|x86.Build.0 = 远程101T|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59C7BD9C-D77B-41A2-BD42-9EE6D14C6587}
 	EndGlobalSection
 EndGlobal

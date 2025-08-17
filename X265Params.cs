@@ -55,17 +55,16 @@ namespace FFX265_Batch_Converter {
         }
 
         public bool oneThread = true,
-            keyintMax = false,keyintSet=false, fades = true, hist_scenecut,
+            keyintMax = false, keyintSet = false, fades = true, hist_scenecut,
             is_aq_mode = false, mcstf = false, is_nr_intra = false, is_nr_inter = false,
-            frame_dup = false, hrd = false, vbv = false,
-            analyze_src_pics = false, umh = false, rect = false, amp = false,
+            umh = false, rect = false, amp = false, rd_refine = true,
             rc_lookahead_halfkeyint = false,
             single_sei = false, no_info = false,
             bframes_thirdfps = false,
             qp_min_max = false
             ;
 
-        
+
         int _aq_mode = 4;
         int _nr_intra = 0, _nr_inter = 0, _bframes = 0;
 
@@ -183,12 +182,25 @@ namespace FFX265_Batch_Converter {
             if (hist_scenecut) stringBuilder.Append(":hist-scenecut=1");
             if (fades) stringBuilder.Append(":fades=1");
 
-            if (analyze_src_pics) stringBuilder.Append(":analyze-src-pics=1");
-
             if (umh) stringBuilder.Append(":me=umh");
 
             if (no_info) stringBuilder.Append(":no-info=1");
             else if (single_sei) stringBuilder.Append(":single-sei=1");
+
+            if (rd_refine) stringBuilder.Append(":rd-refine=1:rd=5");
+
+            
+            if (tbr_out>138) {
+                stringBuilder.Append(":subme=7");
+            } else if (tbr_out > 85) {
+                stringBuilder.Append(":subme=6");
+            } else if (tbr_out > 56) {
+                stringBuilder.Append(":subme=5");
+            } else if (tbr_out > 45) {
+                stringBuilder.Append(":subme=4");
+            } else if (tbr_out > 28) {
+                stringBuilder.Append(":subme=3");
+            }
 
             //stringBuilder.Append(":crf-min=14:crf-max=28");
             //stringBuilder.Append(":qpmin=14:qpmax=28");  //qpmax=28暗场景画质能提升一些，体积增加7%

@@ -236,7 +236,7 @@ namespace FFX265_Batch_Converter {
                 }
                 this.BeginInvoke(new Action(( ) => {
                     this.Text = "FFX265_Batch_Converter Ver." + Application.ProductVersion;
-                    textBoxInfo.Text = "视频文件放入程序同目录转码";
+                    textBoxInfo.Text = "启动方式：\r\n视频程序同目录\r\n或者 视频文件拖拽入窗口\r\n或者 文件夹拖拽入日志框扫描所有视频\r\n或者 文件夹拖入列表框扫描一层文件视频";
                 }));
                 EventShowLogs.WaitOne( );
             }
@@ -335,29 +335,14 @@ namespace FFX265_Batch_Converter {
             }
         }
 
-        Regex regexWriteProcess = new Regex("System|explorer|FastCopy", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         bool isFileLocked(string filePath) {
             try {
                 using (FileStream stream = File.OpenRead(filePath)) {
                     return false;
                 }
-            } catch {
-                if (FileUtil.GetProcessesLockingFile(filePath, out List<Process> list)) {
-                    for (int i = 0; i < list.Count; i++) {
-                        if (list[i].ProcessName.Contains("ffmpeg")) {
-                            return false;
-                        }
-                    }
-                    for (int i = 0; i < list.Count; i++) {
-                        if (regexWriteProcess.IsMatch(list[i].ProcessName)) {
-                            return true;
-                        }
-                    }
-
-                } else return true;
-
-                return false;
-            }
+            } catch { }
+            return true;
         }
 
         void CPUNum( ) {
@@ -421,20 +406,14 @@ namespace FFX265_Batch_Converter {
             userX265Params.is_nr_intra = checkBox_nr_intra.Checked;
             userX265Params.is_nr_inter = checkBox_nr_inter.Checked;
 
-            userX265Params.frame_dup = checkBox_frame_dup.Checked;
-
             userX265Params.keyintMax = checkBox_keyintMax.CheckState == CheckState.Checked;
             userX265Params.keyintSet = checkBox_keyintMax.CheckState == CheckState.Unchecked;
 
-            userX265Params.analyze_src_pics = checkBox_analyze_src_pics.Checked;
-
             userX265Params.umh = checkBox_umh.Checked;
+            userX265Params.rd_refine = checkBox_rd_refine.Checked;
             userX265Params.rect = userX265Params.amp = checkBox_rect_amp.Checked;
             userX265Params.rc_lookahead_halfkeyint = checkBox_rc_lookahead_halfkeyint.Checked;
-
-            userX265Params.hrd = checkBox_hrd.Checked;
-            userX265Params.vbv = checkBox_vbv.Checked;
-
+            
             userX265Params.oneThread = set_oneThread;
             ffmpegParams.oneThread = set_oneThread;
 
@@ -648,9 +627,9 @@ namespace FFX265_Batch_Converter {
                     panel_Params.Visible = false;
             }
 
+            checkBox_rd_refine.Checked = show;
             checkBox_rect_amp.Checked = show;
             checkBox_aq_mode.Checked = show;
-            checkBox_analyze_src_pics.Checked = show;
             checkBox_umh.Checked = show;
 
             checkBox_bframes_thirdfps.Checked = show;
@@ -1238,6 +1217,8 @@ namespace FFX265_Batch_Converter {
 
             if (hasFiles) {
                 upDateVideoFiles( );
+
+                if (buttonEncoding.Text != "刷新(&R)") buttonEncoding.PerformClick( );//自动开始
             }
         }
 

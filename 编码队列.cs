@@ -33,9 +33,10 @@ namespace FFX265_Batch_Converter {
             for (int i = 0; i < processes.Length; i++) {
                 if (processes[i].WorkingSet64 > 536870912 && processes[i].ProcessName.ToLower( ).Contains("ffmpeg")) {
                     RunFFmpeg runFFmpeg = new RunFFmpeg( );
-                    runFFmpeg.fn后台等待(processes[i]);
-                    lock (obj增删排锁) {
-                        _ffmpegs.Add(runFFmpeg);
+                    if (runFFmpeg.b后台等待(processes[i])) {
+                        lock (obj增删排锁) {
+                            _ffmpegs.Add(runFFmpeg);
+                        }
                     }
                 }
             }

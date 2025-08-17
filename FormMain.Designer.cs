@@ -57,6 +57,7 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox长边像素 = new System.Windows.Forms.ToolStripTextBox();
             this.panel_Stream = new System.Windows.Forms.Panel();
+            this.checkBox_single_sei = new System.Windows.Forms.CheckBox();
             this.checkBox_map0s = new System.Windows.Forms.CheckBox();
             this.checkBox_map0a = new System.Windows.Forms.CheckBox();
             this.label_acodec = new System.Windows.Forms.Label();
@@ -71,11 +72,10 @@
             this.checkBox_rc_lookahead_halfkeyint = new System.Windows.Forms.CheckBox();
             this.panel_frames = new System.Windows.Forms.Panel();
             this.checkBox_bframes_thirdfps = new System.Windows.Forms.CheckBox();
-            this.checkBox_fades = new System.Windows.Forms.CheckBox();
             this.checkBox_hist_scenecut = new System.Windows.Forms.CheckBox();
+            this.checkBox_fades = new System.Windows.Forms.CheckBox();
             this.numericUpDown_aq_mode = new System.Windows.Forms.NumericUpDown();
             this.checkBox_aq_mode = new System.Windows.Forms.CheckBox();
-            this.label_keyFrame = new System.Windows.Forms.Label();
             this.panel_dnl = new System.Windows.Forms.Panel();
             this.numericUpDown_nr_inter = new System.Windows.Forms.NumericUpDown();
             this.checkBox_nr_inter = new System.Windows.Forms.CheckBox();
@@ -83,15 +83,9 @@
             this.checkBox_nr_intra = new System.Windows.Forms.CheckBox();
             this.checkBox_mcstf = new System.Windows.Forms.CheckBox();
             this.panel_Search = new System.Windows.Forms.Panel();
+            this.checkBox_rd_refine = new System.Windows.Forms.CheckBox();
             this.checkBox_rect_amp = new System.Windows.Forms.CheckBox();
             this.checkBox_umh = new System.Windows.Forms.CheckBox();
-            this.checkBox_analyze_src_pics = new System.Windows.Forms.CheckBox();
-            this.checkBox_single_sei = new System.Windows.Forms.CheckBox();
-            this.panel_VBV = new System.Windows.Forms.Panel();
-            this.checkBox_vbv = new System.Windows.Forms.CheckBox();
-            this.checkBox_hrd = new System.Windows.Forms.CheckBox();
-            this.checkBox_frame_dup = new System.Windows.Forms.CheckBox();
-            this.label_vbv = new System.Windows.Forms.Label();
             this.panel_Prest = new System.Windows.Forms.Panel();
             this.panel_Quality = new System.Windows.Forms.Panel();
             this.comboBoxPresets = new System.Windows.Forms.ComboBox();
@@ -131,7 +125,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_nr_inter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_nr_intra)).BeginInit();
             this.panel_Search.SuspendLayout();
-            this.panel_VBV.SuspendLayout();
             this.panel_Prest.SuspendLayout();
             this.panel_Quality.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_qpmax)).BeginInit();
@@ -208,7 +201,7 @@
             this.listBoxFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxFiles.FormattingEnabled = true;
             this.listBoxFiles.IntegralHeight = false;
-            this.listBoxFiles.ItemHeight = 17;
+            this.listBoxFiles.ItemHeight = 24;
             this.listBoxFiles.Location = new System.Drawing.Point(0, 23);
             this.listBoxFiles.Name = "listBoxFiles";
             this.listBoxFiles.Size = new System.Drawing.Size(479, 448);
@@ -222,7 +215,7 @@
             this.listBoxFolder.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listBoxFolder.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.listBoxFolder.FormattingEnabled = true;
-            this.listBoxFolder.ItemHeight = 17;
+            this.listBoxFolder.ItemHeight = 24;
             this.listBoxFolder.Location = new System.Drawing.Point(0, 471);
             this.listBoxFolder.Name = "listBoxFolder";
             this.listBoxFolder.Size = new System.Drawing.Size(479, 4);
@@ -246,9 +239,9 @@
             // textBox_add_lavfi
             // 
             this.textBox_add_lavfi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox_add_lavfi.Location = new System.Drawing.Point(63, 0);
+            this.textBox_add_lavfi.Location = new System.Drawing.Point(90, 0);
             this.textBox_add_lavfi.Name = "textBox_add_lavfi";
-            this.textBox_add_lavfi.Size = new System.Drawing.Size(416, 23);
+            this.textBox_add_lavfi.Size = new System.Drawing.Size(389, 31);
             this.textBox_add_lavfi.TabIndex = 1;
             this.textBox_add_lavfi.Text = "nlmeans=1.2:7:5:3:3 , unsharp=5:5:1.0:5:5:0.0";
             this.toolTipList.SetToolTip(this.textBox_add_lavfi, "滤镜需符合ffmpeg语法，顺序加在最后");
@@ -259,7 +252,7 @@
             this.checkBox_add_lavfi.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_add_lavfi.Location = new System.Drawing.Point(0, 0);
             this.checkBox_add_lavfi.Name = "checkBox_add_lavfi";
-            this.checkBox_add_lavfi.Size = new System.Drawing.Size(63, 25);
+            this.checkBox_add_lavfi.Size = new System.Drawing.Size(90, 25);
             this.checkBox_add_lavfi.TabIndex = 0;
             this.checkBox_add_lavfi.Text = "加滤镜";
             this.toolTipList.SetToolTip(this.checkBox_add_lavfi, "选中时启用文本框中的滤镜");
@@ -287,7 +280,7 @@
             this.label_scan_interlaced.ForeColor = System.Drawing.Color.Green;
             this.label_scan_interlaced.Location = new System.Drawing.Point(0, 0);
             this.label_scan_interlaced.Name = "label_scan_interlaced";
-            this.label_scan_interlaced.Size = new System.Drawing.Size(140, 17);
+            this.label_scan_interlaced.Size = new System.Drawing.Size(208, 24);
             this.label_scan_interlaced.TabIndex = 0;
             this.label_scan_interlaced.Text = "自动反交错：以帧为依据";
             this.label_scan_interlaced.Click += new System.EventHandler(this.label_scan_interlaced_Click);
@@ -296,9 +289,9 @@
             // 
             this.checkBox_vfr.AutoSize = true;
             this.checkBox_vfr.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox_vfr.Location = new System.Drawing.Point(202, 0);
+            this.checkBox_vfr.Location = new System.Drawing.Point(78, 0);
             this.checkBox_vfr.Name = "checkBox_vfr";
-            this.checkBox_vfr.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_vfr.Size = new System.Drawing.Size(108, 21);
             this.checkBox_vfr.TabIndex = 1;
             this.checkBox_vfr.Text = "可变帧率";
             this.toolTipList.SetToolTip(this.checkBox_vfr, "识别重复画面并删除，压制为可变帧率视频");
@@ -310,9 +303,9 @@
             this.checkBox_autoCrop.AutoSize = true;
             this.checkBox_autoCrop.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox_autoCrop.ForeColor = System.Drawing.Color.Black;
-            this.checkBox_autoCrop.Location = new System.Drawing.Point(277, 0);
+            this.checkBox_autoCrop.Location = new System.Drawing.Point(186, 0);
             this.checkBox_autoCrop.Name = "checkBox_autoCrop";
-            this.checkBox_autoCrop.Size = new System.Drawing.Size(87, 21);
+            this.checkBox_autoCrop.Size = new System.Drawing.Size(126, 21);
             this.checkBox_autoCrop.TabIndex = 2;
             this.checkBox_autoCrop.Text = "自动裁黑边";
             this.toolTipList.SetToolTip(this.checkBox_autoCrop, "扫描黑边需要额外耗费一些时间");
@@ -323,9 +316,9 @@
             // 
             this.checkBox_useDAR.AutoSize = true;
             this.checkBox_useDAR.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox_useDAR.Location = new System.Drawing.Point(364, 0);
+            this.checkBox_useDAR.Location = new System.Drawing.Point(312, 0);
             this.checkBox_useDAR.Name = "checkBox_useDAR";
-            this.checkBox_useDAR.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_useDAR.Size = new System.Drawing.Size(108, 21);
             this.checkBox_useDAR.TabIndex = 3;
             this.checkBox_useDAR.Text = "比例校正";
             this.toolTipList.SetToolTip(this.checkBox_useDAR, "根据信息中的DAR比例自动修正宽度编码");
@@ -338,9 +331,9 @@
             this.label_scale.ContextMenuStrip = this.contextMenuStrip_Scale;
             this.label_scale.Dock = System.Windows.Forms.DockStyle.Right;
             this.label_scale.ForeColor = System.Drawing.Color.Blue;
-            this.label_scale.Location = new System.Drawing.Point(439, 0);
+            this.label_scale.Location = new System.Drawing.Point(420, 0);
             this.label_scale.Name = "label_scale";
-            this.label_scale.Size = new System.Drawing.Size(40, 17);
+            this.label_scale.Size = new System.Drawing.Size(59, 24);
             this.label_scale.TabIndex = 4;
             this.label_scale.Text = "100%";
             this.toolTipList.SetToolTip(this.label_scale, "点击选择缩小");
@@ -366,7 +359,7 @@
             this.toolStripMenuItem11,
             this.toolStripTextBox长边像素});
             this.contextMenuStrip_Scale.Name = "contextMenuStrip_Scale";
-            this.contextMenuStrip_Scale.Size = new System.Drawing.Size(326, 377);
+            this.contextMenuStrip_Scale.Size = new System.Drawing.Size(440, 430);
             this.contextMenuStrip_Scale.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip_Scale_ItemClicked);
             // 
             // toolStripMenuItem5
@@ -375,14 +368,14 @@
             this.toolStripMenuItem5.Image = global::FFX265_Batch_Converter.Properties.Resources.FHD64_B;
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             this.toolStripMenuItem5.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem5.Text = "↓1920×1080p（只缩小，不放大）";
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             this.toolStripMenuItem6.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem6.Text = "↓2560×1440p（只缩小，不放大）";
             // 
             // toolStripMenuItem7
@@ -390,81 +383,82 @@
             this.toolStripMenuItem7.Image = global::FFX265_Batch_Converter.Properties.Resources.UHD64px_B;
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
             this.toolStripMenuItem7.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem7.Text = "↓3840×2160p（只缩小，不放大）";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem4.Text = "↓1280×720p（只缩小，不放大）";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(436, 6);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem1.Text = "★100%（原始尺寸）";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(436, 6);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem2.Text = "↓50%（画面缩小为四分之一）";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem3.Text = "↓25%（画面缩小为八分之一）";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(436, 6);
             // 
             // toolStripMenuItem8
             // 
             this.toolStripMenuItem8.Font = new System.Drawing.Font("Microsoft YaHei UI", 10F);
             this.toolStripMenuItem8.Image = global::FFX265_Batch_Converter.Properties.Resources.FHD64_B;
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem8.Text = "长边1920像素（Max(w,h)=1920px)";
             // 
             // toolStripMenuItem9
             // 
             this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem9.Text = "长边2560像素（Max(w,h)=2560px)";
             // 
             // toolStripMenuItem10
             // 
             this.toolStripMenuItem10.Image = global::FFX265_Batch_Converter.Properties.Resources.UHD64px_B;
             this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            this.toolStripMenuItem10.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem10.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem10.Text = "长边3840像素（Max(w,h)=3840px)";
             // 
             // toolStripMenuItem11
             // 
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            this.toolStripMenuItem11.Size = new System.Drawing.Size(325, 30);
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(439, 34);
             this.toolStripMenuItem11.Text = "长边1280像素（Max(w,h)=1280px)";
             // 
             // toolStripTextBox长边像素
             // 
+            this.toolStripTextBox长边像素.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.toolStripTextBox长边像素.MaxLength = 5;
             this.toolStripTextBox长边像素.Name = "toolStripTextBox长边像素";
-            this.toolStripTextBox长边像素.Size = new System.Drawing.Size(100, 23);
+            this.toolStripTextBox长边像素.Size = new System.Drawing.Size(100, 30);
             this.toolStripTextBox长边像素.Text = "1024";
             this.toolStripTextBox长边像素.ToolTipText = "长边像素（Max(w,h)=输入的值)";
             this.toolStripTextBox长边像素.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox长边像素_KeyPress);
@@ -472,6 +466,7 @@
             // panel_Stream
             // 
             this.panel_Stream.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel_Stream.Controls.Add(this.checkBox_single_sei);
             this.panel_Stream.Controls.Add(this.checkBox_map0s);
             this.panel_Stream.Controls.Add(this.checkBox_map0a);
             this.panel_Stream.Controls.Add(this.label_acodec);
@@ -482,15 +477,29 @@
             this.panel_Stream.Size = new System.Drawing.Size(479, 21);
             this.panel_Stream.TabIndex = 1;
             // 
+            // checkBox_single_sei
+            // 
+            this.checkBox_single_sei.AutoSize = true;
+            this.checkBox_single_sei.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_single_sei.Location = new System.Drawing.Point(442, 0);
+            this.checkBox_single_sei.Name = "checkBox_single_sei";
+            this.checkBox_single_sei.Size = new System.Drawing.Size(144, 21);
+            this.checkBox_single_sei.TabIndex = 0;
+            this.checkBox_single_sei.Text = "不显编码信息";
+            this.checkBox_single_sei.ThreeState = true;
+            this.toolTipList.SetToolTip(this.checkBox_single_sei, "默认显示编码信息");
+            this.checkBox_single_sei.UseVisualStyleBackColor = true;
+            this.checkBox_single_sei.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_single_sei_MouseClick);
+            // 
             // checkBox_map0s
             // 
             this.checkBox_map0s.AutoSize = true;
             this.checkBox_map0s.Checked = true;
             this.checkBox_map0s.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_map0s.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_map0s.Location = new System.Drawing.Point(230, 0);
+            this.checkBox_map0s.Location = new System.Drawing.Point(334, 0);
             this.checkBox_map0s.Name = "checkBox_map0s";
-            this.checkBox_map0s.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_map0s.Size = new System.Drawing.Size(108, 21);
             this.checkBox_map0s.TabIndex = 3;
             this.checkBox_map0s.Text = "复制字幕";
             this.toolTipList.SetToolTip(this.checkBox_map0s, "-map 0:s -c:s copy");
@@ -503,9 +512,9 @@
             this.checkBox_map0a.Checked = true;
             this.checkBox_map0a.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_map0a.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_map0a.Location = new System.Drawing.Point(167, 0);
+            this.checkBox_map0a.Location = new System.Drawing.Point(244, 0);
             this.checkBox_map0a.Name = "checkBox_map0a";
-            this.checkBox_map0a.Size = new System.Drawing.Size(63, 21);
+            this.checkBox_map0a.Size = new System.Drawing.Size(90, 21);
             this.checkBox_map0a.TabIndex = 2;
             this.checkBox_map0a.Text = "多音轨";
             this.toolTipList.SetToolTip(this.checkBox_map0a, "-map 0 :a | -map 0:a:0");
@@ -517,9 +526,9 @@
             this.label_acodec.AutoSize = true;
             this.label_acodec.Dock = System.Windows.Forms.DockStyle.Left;
             this.label_acodec.ForeColor = System.Drawing.Color.Purple;
-            this.label_acodec.Location = new System.Drawing.Point(111, 0);
+            this.label_acodec.Location = new System.Drawing.Point(162, 0);
             this.label_acodec.Name = "label_acodec";
-            this.label_acodec.Size = new System.Drawing.Size(56, 17);
+            this.label_acodec.Size = new System.Drawing.Size(82, 24);
             this.label_acodec.TabIndex = 1;
             this.label_acodec.Text = "复制音轨";
             this.toolTipList.SetToolTip(this.label_acodec, "-acodec copy");
@@ -528,12 +537,15 @@
             // checkBox_Skip_NewEncodec
             // 
             this.checkBox_Skip_NewEncodec.AutoSize = true;
+            this.checkBox_Skip_NewEncodec.Checked = true;
+            this.checkBox_Skip_NewEncodec.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_Skip_NewEncodec.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_Skip_NewEncodec.Location = new System.Drawing.Point(0, 0);
             this.checkBox_Skip_NewEncodec.Name = "checkBox_Skip_NewEncodec";
-            this.checkBox_Skip_NewEncodec.Size = new System.Drawing.Size(111, 21);
+            this.checkBox_Skip_NewEncodec.Size = new System.Drawing.Size(162, 21);
             this.checkBox_Skip_NewEncodec.TabIndex = 0;
             this.checkBox_Skip_NewEncodec.Text = "跳过更高阶编码";
+            this.toolTipList.SetToolTip(this.checkBox_Skip_NewEncodec, "跳过 av1、vvc、avs3 编码防止视频降级变大");
             this.checkBox_Skip_NewEncodec.UseVisualStyleBackColor = true;
             this.checkBox_Skip_NewEncodec.CheckedChanged += new System.EventHandler(this.checkBox_Skip_NewEncodec_CheckedChanged);
             // 
@@ -552,9 +564,9 @@
             this.checkBox_lockedSet.AutoSize = true;
             this.checkBox_lockedSet.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBox_lockedSet.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.checkBox_lockedSet.Location = new System.Drawing.Point(381, 0);
+            this.checkBox_lockedSet.Location = new System.Drawing.Point(341, 0);
             this.checkBox_lockedSet.Name = "checkBox_lockedSet";
-            this.checkBox_lockedSet.Size = new System.Drawing.Size(98, 23);
+            this.checkBox_lockedSet.Size = new System.Drawing.Size(138, 23);
             this.checkBox_lockedSet.TabIndex = 1;
             this.checkBox_lockedSet.Text = "设置防误触";
             this.checkBox_lockedSet.UseVisualStyleBackColor = true;
@@ -580,7 +592,6 @@
             this.panel_Params.Controls.Add(this.panel_frames);
             this.panel_Params.Controls.Add(this.panel_dnl);
             this.panel_Params.Controls.Add(this.panel_Search);
-            this.panel_Params.Controls.Add(this.panel_VBV);
             this.panel_Params.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_Params.Location = new System.Drawing.Point(0, 542);
             this.panel_Params.Name = "panel_Params";
@@ -607,7 +618,7 @@
             0,
             0,
             0});
-            this.numericUpDown_gop.Location = new System.Drawing.Point(210, 0);
+            this.numericUpDown_gop.Location = new System.Drawing.Point(306, 0);
             this.numericUpDown_gop.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -619,8 +630,8 @@
             0,
             0});
             this.numericUpDown_gop.Name = "numericUpDown_gop";
-            this.numericUpDown_gop.Size = new System.Drawing.Size(59, 23);
-            this.numericUpDown_gop.TabIndex = 2;
+            this.numericUpDown_gop.Size = new System.Drawing.Size(59, 31);
+            this.numericUpDown_gop.TabIndex = 4;
             this.toolTipList.SetToolTip(this.numericUpDown_gop, "--gop=");
             this.numericUpDown_gop.Value = new decimal(new int[] {
             5,
@@ -637,10 +648,10 @@
             this.checkBox_keyintMax.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             this.checkBox_keyintMax.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_keyintMax.ForeColor = System.Drawing.Color.Orange;
-            this.checkBox_keyintMax.Location = new System.Drawing.Point(123, 0);
+            this.checkBox_keyintMax.Location = new System.Drawing.Point(180, 0);
             this.checkBox_keyintMax.Name = "checkBox_keyintMax";
-            this.checkBox_keyintMax.Size = new System.Drawing.Size(87, 21);
-            this.checkBox_keyintMax.TabIndex = 1;
+            this.checkBox_keyintMax.Size = new System.Drawing.Size(126, 21);
+            this.checkBox_keyintMax.TabIndex = 3;
             this.checkBox_keyintMax.Text = "最大关键帧";
             this.checkBox_keyintMax.ThreeState = true;
             this.toolTipList.SetToolTip(this.checkBox_keyintMax, "--keyint");
@@ -653,7 +664,7 @@
             this.checkBox_rc_lookahead_halfkeyint.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_rc_lookahead_halfkeyint.Location = new System.Drawing.Point(0, 0);
             this.checkBox_rc_lookahead_halfkeyint.Name = "checkBox_rc_lookahead_halfkeyint";
-            this.checkBox_rc_lookahead_halfkeyint.Size = new System.Drawing.Size(123, 21);
+            this.checkBox_rc_lookahead_halfkeyint.Size = new System.Drawing.Size(180, 21);
             this.checkBox_rc_lookahead_halfkeyint.TabIndex = 0;
             this.checkBox_rc_lookahead_halfkeyint.Text = "加范围搜索帧类型";
             this.toolTipList.SetToolTip(this.checkBox_rc_lookahead_halfkeyint, "--rc-lookahead=keyint÷2 （大幅消耗内存）");
@@ -664,11 +675,10 @@
             // 
             this.panel_frames.BackColor = System.Drawing.Color.Gainsboro;
             this.panel_frames.Controls.Add(this.checkBox_bframes_thirdfps);
-            this.panel_frames.Controls.Add(this.checkBox_fades);
             this.panel_frames.Controls.Add(this.checkBox_hist_scenecut);
+            this.panel_frames.Controls.Add(this.checkBox_fades);
             this.panel_frames.Controls.Add(this.numericUpDown_aq_mode);
             this.panel_frames.Controls.Add(this.checkBox_aq_mode);
-            this.panel_frames.Controls.Add(this.label_keyFrame);
             this.panel_frames.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_frames.Location = new System.Drawing.Point(0, 42);
             this.panel_frames.Name = "panel_frames";
@@ -679,42 +689,42 @@
             // 
             this.checkBox_bframes_thirdfps.AutoSize = true;
             this.checkBox_bframes_thirdfps.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_bframes_thirdfps.Location = new System.Drawing.Point(257, 0);
+            this.checkBox_bframes_thirdfps.Location = new System.Drawing.Point(288, 0);
             this.checkBox_bframes_thirdfps.Name = "checkBox_bframes_thirdfps";
-            this.checkBox_bframes_thirdfps.Size = new System.Drawing.Size(99, 21);
-            this.checkBox_bframes_thirdfps.TabIndex = 5;
+            this.checkBox_bframes_thirdfps.Size = new System.Drawing.Size(144, 21);
+            this.checkBox_bframes_thirdfps.TabIndex = 2;
             this.checkBox_bframes_thirdfps.Text = "加双向参考帧";
             this.toolTipList.SetToolTip(this.checkBox_bframes_thirdfps, "--weightb=1 --bframes=fps÷3");
             this.checkBox_bframes_thirdfps.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_fades
-            // 
-            this.checkBox_fades.AutoSize = true;
-            this.checkBox_fades.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_fades.Location = new System.Drawing.Point(206, 0);
-            this.checkBox_fades.Name = "checkBox_fades";
-            this.checkBox_fades.Size = new System.Drawing.Size(51, 21);
-            this.checkBox_fades.TabIndex = 4;
-            this.checkBox_fades.Text = "淡入";
-            this.toolTipList.SetToolTip(this.checkBox_fades, "--fades");
-            this.checkBox_fades.UseVisualStyleBackColor = true;
             // 
             // checkBox_hist_scenecut
             // 
             this.checkBox_hist_scenecut.AutoSize = true;
             this.checkBox_hist_scenecut.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_hist_scenecut.Location = new System.Drawing.Point(143, 0);
+            this.checkBox_hist_scenecut.Location = new System.Drawing.Point(198, 0);
             this.checkBox_hist_scenecut.Name = "checkBox_hist_scenecut";
-            this.checkBox_hist_scenecut.Size = new System.Drawing.Size(63, 21);
-            this.checkBox_hist_scenecut.TabIndex = 3;
+            this.checkBox_hist_scenecut.Size = new System.Drawing.Size(90, 21);
+            this.checkBox_hist_scenecut.TabIndex = 1;
             this.checkBox_hist_scenecut.Text = "直方图";
             this.toolTipList.SetToolTip(this.checkBox_hist_scenecut, "--hist-scenecut");
             this.checkBox_hist_scenecut.UseVisualStyleBackColor = true;
             // 
+            // checkBox_fades
+            // 
+            this.checkBox_fades.AutoSize = true;
+            this.checkBox_fades.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_fades.Location = new System.Drawing.Point(126, 0);
+            this.checkBox_fades.Name = "checkBox_fades";
+            this.checkBox_fades.Size = new System.Drawing.Size(72, 21);
+            this.checkBox_fades.TabIndex = 4;
+            this.checkBox_fades.Text = "淡入";
+            this.toolTipList.SetToolTip(this.checkBox_fades, "--fades");
+            this.checkBox_fades.UseVisualStyleBackColor = true;
+            // 
             // numericUpDown_aq_mode
             // 
             this.numericUpDown_aq_mode.Dock = System.Windows.Forms.DockStyle.Left;
-            this.numericUpDown_aq_mode.Location = new System.Drawing.Point(107, 0);
+            this.numericUpDown_aq_mode.Location = new System.Drawing.Point(90, 0);
             this.numericUpDown_aq_mode.Maximum = new decimal(new int[] {
             4,
             0,
@@ -726,7 +736,7 @@
             0,
             0});
             this.numericUpDown_aq_mode.Name = "numericUpDown_aq_mode";
-            this.numericUpDown_aq_mode.Size = new System.Drawing.Size(36, 23);
+            this.numericUpDown_aq_mode.Size = new System.Drawing.Size(36, 31);
             this.numericUpDown_aq_mode.TabIndex = 2;
             this.toolTipList.SetToolTip(this.numericUpDown_aq_mode, "--aq-mode=4");
             this.numericUpDown_aq_mode.Value = new decimal(new int[] {
@@ -741,24 +751,14 @@
             // 
             this.checkBox_aq_mode.AutoSize = true;
             this.checkBox_aq_mode.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_aq_mode.Location = new System.Drawing.Point(44, 0);
+            this.checkBox_aq_mode.Location = new System.Drawing.Point(0, 0);
             this.checkBox_aq_mode.Name = "checkBox_aq_mode";
-            this.checkBox_aq_mode.Size = new System.Drawing.Size(63, 21);
+            this.checkBox_aq_mode.Size = new System.Drawing.Size(90, 21);
             this.checkBox_aq_mode.TabIndex = 1;
             this.checkBox_aq_mode.Text = "自量化";
             this.toolTipList.SetToolTip(this.checkBox_aq_mode, "--aq-mode=1~4");
             this.checkBox_aq_mode.UseVisualStyleBackColor = true;
             this.checkBox_aq_mode.CheckedChanged += new System.EventHandler(this.checkBox_aq_mode_CheckedChanged);
-            // 
-            // label_keyFrame
-            // 
-            this.label_keyFrame.AutoSize = true;
-            this.label_keyFrame.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label_keyFrame.Location = new System.Drawing.Point(0, 0);
-            this.label_keyFrame.Name = "label_keyFrame";
-            this.label_keyFrame.Size = new System.Drawing.Size(44, 17);
-            this.label_keyFrame.TabIndex = 0;
-            this.label_keyFrame.Text = "帧检测";
             // 
             // panel_dnl
             // 
@@ -782,14 +782,14 @@
             0,
             0,
             0});
-            this.numericUpDown_nr_inter.Location = new System.Drawing.Point(279, 0);
+            this.numericUpDown_nr_inter.Location = new System.Drawing.Point(378, 0);
             this.numericUpDown_nr_inter.Maximum = new decimal(new int[] {
             2000,
             0,
             0,
             0});
             this.numericUpDown_nr_inter.Name = "numericUpDown_nr_inter";
-            this.numericUpDown_nr_inter.Size = new System.Drawing.Size(54, 23);
+            this.numericUpDown_nr_inter.Size = new System.Drawing.Size(54, 31);
             this.numericUpDown_nr_inter.TabIndex = 4;
             this.numericUpDown_nr_inter.Visible = false;
             this.numericUpDown_nr_inter.ValueChanged += new System.EventHandler(this.numericUpDown_nr_inter_ValueChanged);
@@ -798,9 +798,9 @@
             // 
             this.checkBox_nr_inter.AutoSize = true;
             this.checkBox_nr_inter.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_nr_inter.Location = new System.Drawing.Point(204, 0);
+            this.checkBox_nr_inter.Location = new System.Drawing.Point(270, 0);
             this.checkBox_nr_inter.Name = "checkBox_nr_inter";
-            this.checkBox_nr_inter.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_nr_inter.Size = new System.Drawing.Size(108, 21);
             this.checkBox_nr_inter.TabIndex = 3;
             this.checkBox_nr_inter.Text = "多帧降噪";
             this.toolTipList.SetToolTip(this.checkBox_nr_inter, "--nr-inter=1~2000");
@@ -815,14 +815,14 @@
             0,
             0,
             0});
-            this.numericUpDown_nr_intra.Location = new System.Drawing.Point(150, 0);
+            this.numericUpDown_nr_intra.Location = new System.Drawing.Point(216, 0);
             this.numericUpDown_nr_intra.Maximum = new decimal(new int[] {
             2000,
             0,
             0,
             0});
             this.numericUpDown_nr_intra.Name = "numericUpDown_nr_intra";
-            this.numericUpDown_nr_intra.Size = new System.Drawing.Size(54, 23);
+            this.numericUpDown_nr_intra.Size = new System.Drawing.Size(54, 31);
             this.numericUpDown_nr_intra.TabIndex = 2;
             this.numericUpDown_nr_intra.Visible = false;
             this.numericUpDown_nr_intra.ValueChanged += new System.EventHandler(this.numericUpDown_nr_intra_ValueChanged);
@@ -831,9 +831,9 @@
             // 
             this.checkBox_nr_intra.AutoSize = true;
             this.checkBox_nr_intra.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_nr_intra.Location = new System.Drawing.Point(75, 0);
+            this.checkBox_nr_intra.Location = new System.Drawing.Point(108, 0);
             this.checkBox_nr_intra.Name = "checkBox_nr_intra";
-            this.checkBox_nr_intra.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_nr_intra.Size = new System.Drawing.Size(108, 21);
             this.checkBox_nr_intra.TabIndex = 1;
             this.checkBox_nr_intra.Text = "单帧降噪";
             this.toolTipList.SetToolTip(this.checkBox_nr_intra, "--nr-intra=1~2000");
@@ -846,7 +846,7 @@
             this.checkBox_mcstf.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_mcstf.Location = new System.Drawing.Point(0, 0);
             this.checkBox_mcstf.Name = "checkBox_mcstf";
-            this.checkBox_mcstf.Size = new System.Drawing.Size(75, 21);
+            this.checkBox_mcstf.Size = new System.Drawing.Size(108, 21);
             this.checkBox_mcstf.TabIndex = 0;
             this.checkBox_mcstf.Text = "空间降噪";
             this.toolTipList.SetToolTip(this.checkBox_mcstf, "--mcstf");
@@ -858,23 +858,34 @@
             // panel_Search
             // 
             this.panel_Search.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel_Search.Controls.Add(this.checkBox_rd_refine);
             this.panel_Search.Controls.Add(this.checkBox_rect_amp);
             this.panel_Search.Controls.Add(this.checkBox_umh);
-            this.panel_Search.Controls.Add(this.checkBox_analyze_src_pics);
-            this.panel_Search.Controls.Add(this.checkBox_single_sei);
             this.panel_Search.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_Search.Location = new System.Drawing.Point(0, 0);
             this.panel_Search.Name = "panel_Search";
             this.panel_Search.Size = new System.Drawing.Size(479, 21);
             this.panel_Search.TabIndex = 2;
             // 
+            // checkBox_rd_refine
+            // 
+            this.checkBox_rd_refine.AutoSize = true;
+            this.checkBox_rd_refine.Dock = System.Windows.Forms.DockStyle.Left;
+            this.checkBox_rd_refine.Location = new System.Drawing.Point(396, 0);
+            this.checkBox_rd_refine.Name = "checkBox_rd_refine";
+            this.checkBox_rd_refine.Size = new System.Drawing.Size(162, 21);
+            this.checkBox_rd_refine.TabIndex = 4;
+            this.checkBox_rd_refine.Text = "强心理视觉优化";
+            this.toolTipList.SetToolTip(this.checkBox_rd_refine, "--rd=5 --rd-refine");
+            this.checkBox_rd_refine.UseVisualStyleBackColor = true;
+            // 
             // checkBox_rect_amp
             // 
             this.checkBox_rect_amp.AutoSize = true;
             this.checkBox_rect_amp.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_rect_amp.Location = new System.Drawing.Point(321, 0);
+            this.checkBox_rect_amp.Location = new System.Drawing.Point(198, 0);
             this.checkBox_rect_amp.Name = "checkBox_rect_amp";
-            this.checkBox_rect_amp.Size = new System.Drawing.Size(135, 21);
+            this.checkBox_rect_amp.Size = new System.Drawing.Size(198, 21);
             this.checkBox_rect_amp.TabIndex = 3;
             this.checkBox_rect_amp.Text = "矩形非对称运动搜索";
             this.toolTipList.SetToolTip(this.checkBox_rect_amp, "--rect --amp");
@@ -884,100 +895,13 @@
             // 
             this.checkBox_umh.AutoSize = true;
             this.checkBox_umh.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_umh.Location = new System.Drawing.Point(186, 0);
+            this.checkBox_umh.Location = new System.Drawing.Point(0, 0);
             this.checkBox_umh.Name = "checkBox_umh";
-            this.checkBox_umh.Size = new System.Drawing.Size(135, 21);
+            this.checkBox_umh.Size = new System.Drawing.Size(198, 21);
             this.checkBox_umh.TabIndex = 2;
             this.checkBox_umh.Text = "不对称多六边形搜索";
             this.toolTipList.SetToolTip(this.checkBox_umh, "--me=umh");
             this.checkBox_umh.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_analyze_src_pics
-            // 
-            this.checkBox_analyze_src_pics.AutoSize = true;
-            this.checkBox_analyze_src_pics.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_analyze_src_pics.Location = new System.Drawing.Point(99, 0);
-            this.checkBox_analyze_src_pics.Name = "checkBox_analyze_src_pics";
-            this.checkBox_analyze_src_pics.Size = new System.Drawing.Size(87, 21);
-            this.checkBox_analyze_src_pics.TabIndex = 1;
-            this.checkBox_analyze_src_pics.Text = "搜索片源帧";
-            this.toolTipList.SetToolTip(this.checkBox_analyze_src_pics, "--analyze-src-pics");
-            this.checkBox_analyze_src_pics.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_single_sei
-            // 
-            this.checkBox_single_sei.AutoSize = true;
-            this.checkBox_single_sei.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_single_sei.Location = new System.Drawing.Point(0, 0);
-            this.checkBox_single_sei.Name = "checkBox_single_sei";
-            this.checkBox_single_sei.Size = new System.Drawing.Size(99, 21);
-            this.checkBox_single_sei.TabIndex = 0;
-            this.checkBox_single_sei.Text = "不显编码信息";
-            this.checkBox_single_sei.ThreeState = true;
-            this.toolTipList.SetToolTip(this.checkBox_single_sei, "默认显示编码信息");
-            this.checkBox_single_sei.UseVisualStyleBackColor = true;
-            this.checkBox_single_sei.MouseClick += new System.Windows.Forms.MouseEventHandler(this.checkBox_single_sei_MouseClick);
-            // 
-            // panel_VBV
-            // 
-            this.panel_VBV.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel_VBV.Controls.Add(this.checkBox_vbv);
-            this.panel_VBV.Controls.Add(this.checkBox_hrd);
-            this.panel_VBV.Controls.Add(this.checkBox_frame_dup);
-            this.panel_VBV.Controls.Add(this.label_vbv);
-            this.panel_VBV.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_VBV.Location = new System.Drawing.Point(0, 105);
-            this.panel_VBV.Name = "panel_VBV";
-            this.panel_VBV.Size = new System.Drawing.Size(479, 18);
-            this.panel_VBV.TabIndex = 0;
-            this.panel_VBV.Visible = false;
-            // 
-            // checkBox_vbv
-            // 
-            this.checkBox_vbv.AutoSize = true;
-            this.checkBox_vbv.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_vbv.Location = new System.Drawing.Point(194, 0);
-            this.checkBox_vbv.Name = "checkBox_vbv";
-            this.checkBox_vbv.Size = new System.Drawing.Size(75, 18);
-            this.checkBox_vbv.TabIndex = 3;
-            this.checkBox_vbv.Text = "量化缓冲";
-            this.toolTipList.SetToolTip(this.checkBox_vbv, "vbv");
-            this.checkBox_vbv.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_hrd
-            // 
-            this.checkBox_hrd.AutoSize = true;
-            this.checkBox_hrd.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_hrd.Location = new System.Drawing.Point(119, 0);
-            this.checkBox_hrd.Name = "checkBox_hrd";
-            this.checkBox_hrd.Size = new System.Drawing.Size(75, 18);
-            this.checkBox_hrd.TabIndex = 2;
-            this.checkBox_hrd.Text = "假设信息";
-            this.toolTipList.SetToolTip(this.checkBox_hrd, "--hrd");
-            this.checkBox_hrd.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_frame_dup
-            // 
-            this.checkBox_frame_dup.AutoSize = true;
-            this.checkBox_frame_dup.Dock = System.Windows.Forms.DockStyle.Left;
-            this.checkBox_frame_dup.Location = new System.Drawing.Point(56, 0);
-            this.checkBox_frame_dup.Name = "checkBox_frame_dup";
-            this.checkBox_frame_dup.Size = new System.Drawing.Size(63, 18);
-            this.checkBox_frame_dup.TabIndex = 1;
-            this.checkBox_frame_dup.Text = "帧复制";
-            this.toolTipList.SetToolTip(this.checkBox_frame_dup, "--frame-dup");
-            this.checkBox_frame_dup.UseVisualStyleBackColor = true;
-            this.checkBox_frame_dup.CheckedChanged += new System.EventHandler(this.checkBox_frame_dup_CheckedChanged);
-            // 
-            // label_vbv
-            // 
-            this.label_vbv.AutoSize = true;
-            this.label_vbv.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label_vbv.Location = new System.Drawing.Point(0, 0);
-            this.label_vbv.Name = "label_vbv";
-            this.label_vbv.Size = new System.Drawing.Size(56, 17);
-            this.label_vbv.TabIndex = 0;
-            this.label_vbv.Text = "流媒体用";
             // 
             // panel_Prest
             // 
@@ -1001,9 +925,9 @@
             this.panel_Quality.Controls.Add(this.numericUpDownCRF);
             this.panel_Quality.Controls.Add(this.labe_crf);
             this.panel_Quality.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Quality.Location = new System.Drawing.Point(0, 17);
+            this.panel_Quality.Location = new System.Drawing.Point(0, 24);
             this.panel_Quality.Name = "panel_Quality";
-            this.panel_Quality.Size = new System.Drawing.Size(479, 27);
+            this.panel_Quality.Size = new System.Drawing.Size(479, 20);
             this.panel_Quality.TabIndex = 5;
             // 
             // comboBoxPresets
@@ -1038,9 +962,9 @@
             "veryfast（非常快）",
             "faster（更加一些）",
             "fast（稍微快一些）"});
-            this.comboBoxPresets.Location = new System.Drawing.Point(275, 2);
+            this.comboBoxPresets.Location = new System.Drawing.Point(320, -12);
             this.comboBoxPresets.Name = "comboBoxPresets";
-            this.comboBoxPresets.Size = new System.Drawing.Size(204, 25);
+            this.comboBoxPresets.Size = new System.Drawing.Size(159, 32);
             this.comboBoxPresets.TabIndex = 6;
             this.comboBoxPresets.Text = "medium（标准速度）";
             this.toolTipList.SetToolTip(this.comboBoxPresets, "速度的预设");
@@ -1051,14 +975,14 @@
             this.numericUpDown_qpmax.DecimalPlaces = 2;
             this.numericUpDown_qpmax.Dock = System.Windows.Forms.DockStyle.Left;
             this.numericUpDown_qpmax.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.numericUpDown_qpmax.Location = new System.Drawing.Point(219, 0);
+            this.numericUpDown_qpmax.Location = new System.Drawing.Point(264, 0);
             this.numericUpDown_qpmax.Maximum = new decimal(new int[] {
             69,
             0,
             0,
             0});
             this.numericUpDown_qpmax.Name = "numericUpDown_qpmax";
-            this.numericUpDown_qpmax.Size = new System.Drawing.Size(56, 25);
+            this.numericUpDown_qpmax.Size = new System.Drawing.Size(56, 34);
             this.numericUpDown_qpmax.TabIndex = 5;
             this.numericUpDown_qpmax.Value = new decimal(new int[] {
             69,
@@ -1072,9 +996,9 @@
             // 
             this.label_qp_min_max.AutoSize = true;
             this.label_qp_min_max.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label_qp_min_max.Location = new System.Drawing.Point(202, 0);
+            this.label_qp_min_max.Location = new System.Drawing.Point(241, 0);
             this.label_qp_min_max.Name = "label_qp_min_max";
-            this.label_qp_min_max.Size = new System.Drawing.Size(17, 17);
+            this.label_qp_min_max.Size = new System.Drawing.Size(23, 24);
             this.label_qp_min_max.TabIndex = 4;
             this.label_qp_min_max.Text = "~";
             this.label_qp_min_max.Visible = false;
@@ -1084,14 +1008,14 @@
             this.numericUpDown_qpmin.DecimalPlaces = 2;
             this.numericUpDown_qpmin.Dock = System.Windows.Forms.DockStyle.Left;
             this.numericUpDown_qpmin.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.numericUpDown_qpmin.Location = new System.Drawing.Point(146, 0);
+            this.numericUpDown_qpmin.Location = new System.Drawing.Point(185, 0);
             this.numericUpDown_qpmin.Maximum = new decimal(new int[] {
             63,
             0,
             0,
             0});
             this.numericUpDown_qpmin.Name = "numericUpDown_qpmin";
-            this.numericUpDown_qpmin.Size = new System.Drawing.Size(56, 25);
+            this.numericUpDown_qpmin.Size = new System.Drawing.Size(56, 34);
             this.numericUpDown_qpmin.TabIndex = 3;
             this.numericUpDown_qpmin.Visible = false;
             this.numericUpDown_qpmin.ValueChanged += new System.EventHandler(this.numericUpDown_qp_range_ValueChanged);
@@ -1101,9 +1025,9 @@
             this.checkBox_qp_min_max.AutoSize = true;
             this.checkBox_qp_min_max.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBox_qp_min_max.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.checkBox_qp_min_max.Location = new System.Drawing.Point(90, 0);
+            this.checkBox_qp_min_max.Location = new System.Drawing.Point(107, 0);
             this.checkBox_qp_min_max.Name = "checkBox_qp_min_max";
-            this.checkBox_qp_min_max.Size = new System.Drawing.Size(56, 27);
+            this.checkBox_qp_min_max.Size = new System.Drawing.Size(78, 20);
             this.checkBox_qp_min_max.TabIndex = 2;
             this.checkBox_qp_min_max.Text = "约束";
             this.toolTipList.SetToolTip(this.checkBox_qp_min_max, "--qpmin=  --qpmax=");
@@ -1115,14 +1039,14 @@
             this.numericUpDownCRF.DecimalPlaces = 1;
             this.numericUpDownCRF.Dock = System.Windows.Forms.DockStyle.Left;
             this.numericUpDownCRF.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.numericUpDownCRF.Location = new System.Drawing.Point(34, 0);
+            this.numericUpDownCRF.Location = new System.Drawing.Point(51, 0);
             this.numericUpDownCRF.Maximum = new decimal(new int[] {
             52,
             0,
             0,
             0});
             this.numericUpDownCRF.Name = "numericUpDownCRF";
-            this.numericUpDownCRF.Size = new System.Drawing.Size(56, 25);
+            this.numericUpDownCRF.Size = new System.Drawing.Size(56, 34);
             this.numericUpDownCRF.TabIndex = 1;
             this.numericUpDownCRF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTipList.SetToolTip(this.numericUpDownCRF, "-crf ");
@@ -1141,7 +1065,7 @@
             this.labe_crf.ForeColor = System.Drawing.Color.Black;
             this.labe_crf.Location = new System.Drawing.Point(0, 0);
             this.labe_crf.Name = "labe_crf";
-            this.labe_crf.Size = new System.Drawing.Size(34, 20);
+            this.labe_crf.Size = new System.Drawing.Size(51, 28);
             this.labe_crf.TabIndex = 0;
             this.labe_crf.Text = "CRF";
             // 
@@ -1151,7 +1075,7 @@
             this.labelCRFRange.Dock = System.Windows.Forms.DockStyle.Top;
             this.labelCRFRange.Location = new System.Drawing.Point(0, 0);
             this.labelCRFRange.Name = "labelCRFRange";
-            this.labelCRFRange.Size = new System.Drawing.Size(455, 17);
+            this.labelCRFRange.Size = new System.Drawing.Size(687, 24);
             this.labelCRFRange.TabIndex = 0;
             this.labelCRFRange.Text = "CRF=画质精细｛原盘：8~14；好：18~23；中：23~28；低：28~32；糊：32+｝";
             // 
@@ -1173,7 +1097,7 @@
             this.checkBoxAM8Sleep.Dock = System.Windows.Forms.DockStyle.Left;
             this.checkBoxAM8Sleep.Location = new System.Drawing.Point(0, 23);
             this.checkBoxAM8Sleep.Name = "checkBoxAM8Sleep";
-            this.checkBoxAM8Sleep.Size = new System.Drawing.Size(339, 20);
+            this.checkBoxAM8Sleep.Size = new System.Drawing.Size(506, 20);
             this.checkBoxAM8Sleep.TabIndex = 1;
             this.checkBoxAM8Sleep.Text = "省钱模式：(8:00~21:45)峰电休眠，需要配合主板定时唤醒";
             this.toolTipList.SetToolTip(this.checkBoxAM8Sleep, "峰谷电用户特色功能");
@@ -1199,9 +1123,9 @@
             this.label_0_NumProcess.Dock = System.Windows.Forms.DockStyle.Left;
             this.label_0_NumProcess.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.label_0_NumProcess.ForeColor = System.Drawing.Color.White;
-            this.label_0_NumProcess.Location = new System.Drawing.Point(82, 0);
+            this.label_0_NumProcess.Location = new System.Drawing.Point(97, 0);
             this.label_0_NumProcess.Name = "label_0_NumProcess";
-            this.label_0_NumProcess.Size = new System.Drawing.Size(37, 20);
+            this.label_0_NumProcess.Size = new System.Drawing.Size(52, 27);
             this.label_0_NumProcess.TabIndex = 2;
             this.label_0_NumProcess.Text = "刹车";
             this.toolTipList.SetToolTip(this.label_0_NumProcess, "完成当前任务~暂停");
@@ -1211,11 +1135,11 @@
             // 
             this.checkBox_OneKey.AutoSize = true;
             this.checkBox_OneKey.Dock = System.Windows.Forms.DockStyle.Right;
-            this.checkBox_OneKey.Location = new System.Drawing.Point(197, 0);
+            this.checkBox_OneKey.Location = new System.Drawing.Point(99, 0);
             this.checkBox_OneKey.Name = "checkBox_OneKey";
-            this.checkBox_OneKey.Size = new System.Drawing.Size(203, 23);
+            this.checkBox_OneKey.Size = new System.Drawing.Size(301, 23);
             this.checkBox_OneKey.TabIndex = 3;
-            this.checkBox_OneKey.Text = "消耗8倍算力与内存缩小10%体积";
+            this.checkBox_OneKey.Text = "消耗7倍算力与内存缩小10%体积";
             this.toolTipList.SetToolTip(this.checkBox_OneKey, "增加压缩率的都选上");
             this.checkBox_OneKey.UseVisualStyleBackColor = true;
             this.checkBox_OneKey.CheckedChanged += new System.EventHandler(this.checkBox_oneKey_CheckedChanged);
@@ -1224,14 +1148,14 @@
             // 
             this.numericUpDown_NumProcess.Dock = System.Windows.Forms.DockStyle.Left;
             this.numericUpDown_NumProcess.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.numericUpDown_NumProcess.Location = new System.Drawing.Point(35, 0);
+            this.numericUpDown_NumProcess.Location = new System.Drawing.Point(50, 0);
             this.numericUpDown_NumProcess.Maximum = new decimal(new int[] {
             768,
             0,
             0,
             0});
             this.numericUpDown_NumProcess.Name = "numericUpDown_NumProcess";
-            this.numericUpDown_NumProcess.Size = new System.Drawing.Size(47, 23);
+            this.numericUpDown_NumProcess.Size = new System.Drawing.Size(47, 31);
             this.numericUpDown_NumProcess.TabIndex = 1;
             this.numericUpDown_NumProcess.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTipList.SetToolTip(this.numericUpDown_NumProcess, "检查CPU核心数、内存容量再设置较为稳妥");
@@ -1251,7 +1175,7 @@
             this.labeloneThread.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.labeloneThread.Location = new System.Drawing.Point(0, 0);
             this.labeloneThread.Name = "labeloneThread";
-            this.labeloneThread.Size = new System.Drawing.Size(35, 19);
+            this.labeloneThread.Size = new System.Drawing.Size(50, 25);
             this.labeloneThread.TabIndex = 0;
             this.labeloneThread.Text = "多开";
             this.toolTipList.SetToolTip(this.labeloneThread, "x265线程控制");
@@ -1278,7 +1202,7 @@
             // FormMain
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 752);
             this.Controls.Add(this.splitContainerMain);
@@ -1325,8 +1249,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_nr_intra)).EndInit();
             this.panel_Search.ResumeLayout(false);
             this.panel_Search.PerformLayout();
-            this.panel_VBV.ResumeLayout(false);
-            this.panel_VBV.PerformLayout();
             this.panel_Prest.ResumeLayout(false);
             this.panel_Prest.PerformLayout();
             this.panel_Quality.ResumeLayout(false);
@@ -1364,21 +1286,15 @@
         private System.Windows.Forms.Panel panel_process;
         private System.Windows.Forms.CheckBox checkBoxAM8Sleep;
         private System.Windows.Forms.CheckBox checkBox_fades;
-        private System.Windows.Forms.CheckBox checkBox_frame_dup;
         private System.Windows.Forms.Panel panel_Prest;
         private System.Windows.Forms.CheckBox checkBox_keyintMax;
         private System.Windows.Forms.Panel panel_Search;
         private System.Windows.Forms.CheckBox checkBox_map0a;
-        private System.Windows.Forms.CheckBox checkBox_analyze_src_pics;
         private System.Windows.Forms.CheckBox checkBox_umh;
         private System.Windows.Forms.CheckBox checkBox_rc_lookahead_halfkeyint;
         private System.Windows.Forms.Panel panel_User;
         private System.Windows.Forms.Panel panel_List;
-        private System.Windows.Forms.Panel panel_VBV;
         private System.Windows.Forms.CheckBox checkBox_single_sei;
-        private System.Windows.Forms.CheckBox checkBox_hrd;
-        private System.Windows.Forms.CheckBox checkBox_vbv;
-        private System.Windows.Forms.Label label_vbv;
         private System.Windows.Forms.Panel panel_dnl;
         private System.Windows.Forms.NumericUpDown numericUpDown_nr_intra;
         private System.Windows.Forms.NumericUpDown numericUpDown_nr_inter;
@@ -1395,7 +1311,6 @@
         private System.Windows.Forms.Label label_qp_min_max;
         private System.Windows.Forms.Label label_scale;
         private System.Windows.Forms.CheckBox checkBox_hist_scenecut;
-        private System.Windows.Forms.Label label_keyFrame;
         private System.Windows.Forms.CheckBox checkBox_map0s;
         private System.Windows.Forms.NumericUpDown numericUpDown_aq_mode;
         private System.Windows.Forms.CheckBox checkBox_aq_mode;
@@ -1431,6 +1346,7 @@
         private System.Windows.Forms.CheckBox checkBox_lockedSet;
         private System.Windows.Forms.Panel panel_AppSet;
         private System.Windows.Forms.CheckBox checkBox_rect_amp;
+        private System.Windows.Forms.CheckBox checkBox_rd_refine;
     }
 }
 

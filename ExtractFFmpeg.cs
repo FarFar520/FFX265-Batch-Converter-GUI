@@ -14,7 +14,7 @@ namespace FFX265_Batch_Converter {
         }
 
         static void background( ) {
-            if (!File.Exists("ffmpeg.exe") && !File.Exists("ffprobe.exe")) {
+            if (!File.Exists("ffmpeg.exe")) {
                 using (MemoryStream resourceStream = new MemoryStream(Resources._7z)) {
                     using (var archive = new ZipArchive(resourceStream, ZipArchiveMode.Read)) {
                         foreach (var entry in archive.Entries) {
@@ -32,7 +32,7 @@ namespace FFX265_Batch_Converter {
                     process.StartInfo.FileName = "7z";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.Arguments = $"x ffmpeg.7z -y -aou";
+                    process.StartInfo.Arguments = $"x ffmpeg.7z -y -aos";
                     try {
                         process.Start( );
                         process.WaitForExit( );
@@ -53,7 +53,7 @@ namespace FFX265_Batch_Converter {
                 try {
                     using (var archive = ZipFile.OpenRead(filePath)) {
                         foreach (var entry in archive.Entries) {
-                            if (entry.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && entry.Name.Contains("ffmpeg")) {
+                            if (entry.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && (entry.Name.Contains("ffmpeg") || entry.Name.Contains("ffprobe"))) {
                                 string exeFile = $"{entry.Name.Substring(0, entry.Name.Length - 4)}.{entry.LastWriteTime.ToString("yyyy.MM.dd.HHmm")}.exe";
                                 if (!File.Exists(exeFile)) {
                                     try {

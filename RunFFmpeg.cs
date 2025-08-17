@@ -64,7 +64,7 @@ namespace FFX265_Batch_Converter {
         string str路径_转码输出;
         string vcode = string.Empty;
 
-        string str信息输出 = string.Empty, str编码输出 = string.Empty;
+        string str信息显示 = string.Empty, str编码输出 = string.Empty,str日志输出=string.Empty;
 
         string get输出Progressive {
             get {
@@ -104,15 +104,14 @@ namespace FFX265_Batch_Converter {
             } else return string.Empty;
         }
 
-        string _str进度 = string.Empty;
         public string str信息 {
             get {
-                if (!b等待文件归档) return str信息输出;
+                if (!b等待文件归档) return str信息显示;
                 else if (!b出新帧) {
-                    if (_str进度 != string.Empty)
-                        return _str进度;
+                    if (str信息显示 != string.Empty)
+                        return str信息显示;
                     else
-                        return fi输入文件.Name + "\r\n" + str信息输出;
+                        return fi输入文件.Name + "\r\n" + str日志输出;
                 } else b出新帧 = false;
 
                 Match mt = regexTime.Match(str编码输出);
@@ -129,10 +128,10 @@ namespace FFX265_Batch_Converter {
                     TimeSpan ts预计 = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds / span进度.TotalMilliseconds * vTime.span编码.Subtract(span进度).TotalMilliseconds);
                     //ElapsedMilliseconds 长整数有丢失精度、溢出问题，需要使用双精度小数计算毫秒。
 
-                    return str信息输出 = $"{pct:P2}{str预计剩余(ts预计)} {fi输入文件.Name}\r\n{str编码输出}";
+                    return str信息显示 = $"{pct:P2}{str预计剩余(ts预计)} {fi输入文件.Name}\r\n{str编码输出}";
 
                 } else {
-                    return str信息输出 = $"{pct:P2} {fi输入文件.Name}\r\n{str编码输出}";
+                    return str信息显示 = $"{pct:P2} {fi输入文件.Name}\r\n{str编码输出}";
                 }
             }
         }
@@ -190,19 +189,25 @@ namespace FFX265_Batch_Converter {
 
             str线程 = b单线程 ? "-threads 1 -filter_threads 1 -filter_complex_threads 1 " : "";
         }
-        public void fn后台等待(Process process) {
-            str信息输出 = process.StartInfo.Arguments;
-            string wmiQuery = string.Format("select CommandLine from Win32_Process where ProcessID={0}", process.Id);
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-            ManagementObjectCollection retObjectCollection = searcher.Get( );
-            foreach (ManagementObject retObject in retObjectCollection)
-                str信息输出 += retObject["CommandLine"];
+        public bool b后台等待(Process process) {
+            try {
+                str信息显示 = process.MainModule.FileName + "\r\n";
 
-            //Match matchInput = regexFFmpeg命令行中载入文件.Match(str信息输出);
-            //if (matchInput.Success) {                str信息输出 = $"现有ffmpeg {matchInput.Groups["file"].Value}";            }
+                string wmiQuery = string.Format("select CommandLine from Win32_Process where ProcessID={0}", process.Id);
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+                ManagementObjectCollection retObjectCollection = searcher.Get( );
+                foreach (ManagementObject retObject in retObjectCollection)
+                    str信息显示 += retObject["CommandLine"];
+
+                //Match matchInput = regexFFmpeg命令行中载入文件.Match(str信息输出);
+                //if (matchInput.Success) {                str信息输出 = $"现有ffmpeg {matchInput.Groups["file"].Value}";            }
+            } catch { return false; }
+
+            str信息显示 = str信息显示.Trim( );
             th后台线程 = new Thread(new ParameterizedThreadStart(fx后台等待));
             th后台线程.IsBackground = true;
             th后台线程.Start(process);
+            return true;
         }
         public void X265转码(X265Params userX265Params) {
             str日志类型 = "x265转码";
@@ -308,7 +313,7 @@ namespace FFX265_Batch_Converter {
         }
 
         void fn后台混流( ) {
-            str信息输出 = "混流中……";
+            str信息显示 = "混流中……";
             str输出文件 = $"{fi输入文件.Name}丨混流.{DateTime.Now:yy.MM.dd.HH.mm.ss}{str输出格式}";
             string str完整命令行 = $"-i \"{fi输入文件.Name}\" -c copy \"{name工作文件夹}\\{str输出文件}\"";
             bool b运行结束 = fx后台编码(str完整命令行, out int i退出代码);
@@ -318,7 +323,7 @@ namespace FFX265_Batch_Converter {
             _b已结束 = true;
         }
         void fnX265编码走起( ) {
-            str信息输出 = "Running……";
+            str信息显示 = "Running……";
 
             fx信息匹配( );
             fx字幕匹配( );
@@ -339,28 +344,26 @@ namespace FFX265_Batch_Converter {
             if (Setting.b跳过更高阶编码) {
                 if (!ffmpegParams.b_add_lavfi_set && ffmpegParams.crf > 0 && !userX265Params.keyintSet && !b隔行扫描 && !b发生自动剪裁 && !b发生缩放 && !b时间剪裁 && !b硬字幕 && !(b可变帧率 && !fi输入文件.Name.Contains("vfr"))) {
                     //挂了外部滤镜、固定了关键帧间距，转无损、恒定帧率转可变帧率 再次编码
-                    b跳过编码 = (vcode.Contains("265") || vcode.Contains("hevc") || vcode.Contains("hev1") || vcode.Contains("hvc1") || vcode.Contains("av1") || vcode.Contains("vvc1") || vcode.Contains("vvc") || vcode.Contains("avs3"));
+                    b跳过编码 = ( vcode.Contains("av1") || vcode.Contains("vvc1") || vcode.Contains("vvc") || vcode.Contains("avs3")); //vcode.Contains("265") || vcode.Contains("hevc") || vcode.Contains("hev1") || vcode.Contains("hvc1")
                 }
             } else if (!b有视轨) {
                 b跳过编码 = true;
             }
 
             if (b跳过编码) {
-                str信息输出 = "Skiping……";
-                fx跳过HEVC转码文件移动( );
+                str信息显示 = "Skiping……";
+                fx跳过更高阶编码文件移动( );
             } else {
                 string str完整命令行 = fx参数拼接( );
-                str信息输出 = vTime.b剪裁片头 ? "Seeking……" : "Encoding……";
+                str信息显示 = vTime.b剪裁片头 ? "Seeking……" : "Encoding……";
                 fx后台编码(str完整命令行, out int i退出代码);
-                str信息输出 = "Finishing……";
+                str信息显示 = "Finishing……";
                 fx文件归档(i退出代码, b判断时长: true);
             }
 
             b等待文件归档 = false;
             _b已结束 = true;
         }
-
-
 
         void fx信息匹配( ) {
             bool b_ffprobe;
@@ -369,12 +372,12 @@ namespace FFX265_Batch_Converter {
             exe = find可执行ffprobe( );
 
             if (Setting.b以帧识别隔行扫 && exe != string.Empty) {//“ffprobe.exe”不是长时间运行的文件，每次运行检查一下；
-                str信息输出 = "扫描交错帧……";
+                str信息显示 = "扫描交错帧……";
                 b_ffprobe = true;
                 exe = _ffprobe;
                 commamd = $"\"{fi输入文件.Name}\" -select_streams v -read_intervals \"%+#{scan_frame}\" -show_entries \"frame=interlaced_frame\"";
             } else {
-                str信息输出 = "读取编码信息……";
+                str信息显示 = "读取编码信息……";
                 b_ffprobe = false;
                 exe = _ffmpeg;
                 commamd = string.Format("-i \"{0}\"", fi输入文件.Name);
@@ -393,7 +396,7 @@ namespace FFX265_Batch_Converter {
                 try {
                     process.Start( );//启动程序
                 } catch (Exception err) {
-                    str信息输出 = err.Message;
+                    str信息显示 = err.Message;
                     return;
                 }
                 if (b_ffprobe) {
@@ -405,11 +408,11 @@ namespace FFX265_Batch_Converter {
                 string str时长 = string.Empty;
 
                 while (!process.StandardError.EndOfStream) {
-                    str信息输出 = process.StandardError.ReadLine( ).Trim( );
-                    if (str信息输出.StartsWith("Stream #0", StringComparison.OrdinalIgnoreCase)) {
-                        list轨道.Add(str信息输出);
-                    } else if (str信息输出.StartsWith("Duration: ", StringComparison.OrdinalIgnoreCase)) {
-                        str时长 = str信息输出;
+                    str信息显示 = process.StandardError.ReadLine( ).Trim( );
+                    if (str信息显示.StartsWith("Stream #0", StringComparison.OrdinalIgnoreCase)) {
+                        list轨道.Add(str信息显示);
+                    } else if (str信息显示.StartsWith("Duration: ", StringComparison.OrdinalIgnoreCase)) {
+                        str时长 = str信息显示;
                     }
                 }
 
@@ -513,8 +516,8 @@ namespace FFX265_Batch_Converter {
                 string subTitle = string.Format("{0}\\{1}.{2}", fi输入文件.DirectoryName, str无后缀文件名, sub带特效字幕[i]);
                 if (File.Exists(subTitle)) {
                     str字幕 = $"subtitles='{str无后缀文件名}.{sub带特效字幕[i]}'";
-                    str信息输出 = "渲染高级字幕：" + str字幕;
-                    builder日志.AppendLine(str信息输出);
+                    str信息显示 = "渲染高级字幕：" + str字幕;
+                    builder日志.AppendLine(str信息显示);
                     b硬字幕 = true;
                     break;
                 }
@@ -527,8 +530,8 @@ namespace FFX265_Batch_Converter {
                     string subTitle = string.Format("{0}\\{1}.{2}", fi输入文件.DirectoryName, str无后缀文件名, sub文字字幕[i]);
                     if (File.Exists(subTitle)) {
                         str字幕 = $"subtitles='{str无后缀文件名}.{sub文字字幕[i]}:{str字幕渲染效果}'";
-                        str信息输出 = "渲染文字字幕：" + str字幕;
-                        builder日志.AppendLine(str信息输出);
+                        str信息显示 = "渲染文字字幕：" + str字幕;
+                        builder日志.AppendLine(str信息显示);
                         b硬字幕 = true;
                         break;
                     }
@@ -553,7 +556,7 @@ namespace FFX265_Batch_Converter {
             Dictionary<string, int> crops = new Dictionary<string, int>( );
             List<string> list = new List<string>( );
 
-            str信息输出 = "扫描黑边中……";
+            str信息显示 = "扫描黑边中……";
             FormMain.EventShowLogs.Set( );
 
             int iStarSec = (int)vTime.time编码开始.TotalSeconds;
@@ -563,7 +566,7 @@ namespace FFX265_Batch_Converter {
                 if (!vTime.b剪裁片头) iStarSec += 250;
                 if (!vTime.b剪裁片尾) endSec -= 250;
                 for (float ss = iStarSec; ss < endSec; ss += 250) {
-                    str信息输出 = string.Format("扫描黑边 {0:F2}%", 100 * ss / endSec);
+                    str信息显示 = string.Format("扫描黑边 {0:F2}%", 100 * ss / endSec);
                     if (Setting.b自动剪裁黑边) seekCropdetect(ss, 5, ref list);
                     else return false;//中途改变设置的话，立刻跳出。
                 }
@@ -572,7 +575,7 @@ namespace FFX265_Batch_Converter {
                 if (!vTime.b剪裁片头) iStarSec += 30;
                 if (!vTime.b剪裁片尾) endSec -= 5;
                 for (float ss = iStarSec; ss < endSec; ss += step) {
-                    str信息输出 = string.Format("扫描黑边 {0:F2}%", 100 * ss / endSec);
+                    str信息显示 = string.Format("扫描黑边 {0:F2}%", 100 * ss / endSec);
                     if (Setting.b自动剪裁黑边) seekCropdetect(ss, 5, ref list);
                     else return false;//中途改变设置的话，立刻跳出。
                 }
@@ -650,7 +653,7 @@ namespace FFX265_Batch_Converter {
                     process.Start( );//启动程序
                     process.PriorityClass = ProcessPriorityClass.BelowNormal;
                 } catch (Exception err) {
-                    str信息输出 = err.Message;
+                    str信息显示 = err.Message;
                     return;
                 }
                 while (!process.StandardError.EndOfStream) {
@@ -749,13 +752,13 @@ namespace FFX265_Batch_Converter {
             if (Setting.b自动反交错 && b隔行扫描) {
                 listFilter.Add("bwdif=1:-1:1");//交错视频，逐帧反交错。
                 //listFilter.Add("bwdif=0:-1:0");//交错视频，每场混合为一帧。
-                str信息输出 = "反交错帧：bwdif=1:-1:1";
-                builder日志.AppendLine(str信息输出);
+                str信息显示 = "反交错帧：bwdif=1:-1:1";
+                builder日志.AppendLine(str信息显示);
             }
 
             if (b发生自动剪裁) {
-                str信息输出 = "自动剪裁：" + str剪裁参数;
-                builder日志.AppendLine(str信息输出);
+                str信息显示 = "自动剪裁：" + str剪裁参数;
+                builder日志.AppendLine(str信息显示);
                 listFilter.Add(str剪裁参数);
             }
 
@@ -763,8 +766,8 @@ namespace FFX265_Batch_Converter {
 
             if (b畸变) {
                 if (b发生缩放) {
-                    str信息输出 = "缩放参数：" + str缩放参数;
-                    builder日志.AppendLine(str信息输出);
+                    str信息显示 = "缩放参数：" + str缩放参数;
+                    builder日志.AppendLine(str信息显示);
                     listFilter.Add(str缩放参数);
                 }
                 if (b硬字幕) {//如果是修正畸变缩放，先渲染字幕会被拉变形。
@@ -775,8 +778,8 @@ namespace FFX265_Batch_Converter {
                     listFilter.Add(str字幕);
                 }
                 if (b发生缩放) {
-                    str信息输出 = "缩放参数：" + str缩放参数;
-                    builder日志.AppendLine(str信息输出);
+                    str信息显示 = "缩放参数：" + str缩放参数;
+                    builder日志.AppendLine(str信息显示);
                     listFilter.Add(str缩放参数);
                 }
             }
@@ -845,17 +848,17 @@ namespace FFX265_Batch_Converter {
                     return false;
                 }
                 while (!process.StandardError.EndOfStream) {
-                    string line = process.StandardError.ReadLine( );//载入信息、头信息不显示在界面上。
-                    if (!string.IsNullOrEmpty(line)) {
-                        int iframe = line.IndexOf("frame=") + 6;
+                    str日志输出 = process.StandardError.ReadLine( );//载入信息、头信息不显示在界面上。
+                    if (!string.IsNullOrEmpty(str日志输出)) {
+                        int iframe = str日志输出.IndexOf("frame=") + 6;
                         if (iframe >= 6) {
                             index_frame = iframe;
-                            str编码输出 = line;
+                            str编码输出 = str日志输出;
                             b出新帧 = true;
                             FormMain.EventShowLogs.Set( );//开始出帧则刷新显示表示在运转。
                             break;
                         } else {
-                            builder日志.AppendLine(line);
+                            builder日志.AppendLine(str日志输出);
                         }
                     }
                 }
@@ -864,16 +867,16 @@ namespace FFX265_Batch_Converter {
                     fx工作日志( );
                 }
                 while (!process.StandardError.EndOfStream) {
-                    string line = process.StandardError.ReadLine( );//编码过程中的信息可以刷新到程序显示。
-                    if (line != null) {
-                        int iframe = line.IndexOf("frame=") + 6;
+                    string str日志输出 = process.StandardError.ReadLine( );//编码过程中的信息可以刷新到程序显示。
+                    if (str日志输出 != null) {
+                        int iframe = str日志输出.IndexOf("frame=") + 6;
                         if (iframe >= 6) {
                             index_frame = iframe;
-                            str信息输出 = line;
-                            str编码输出 = line;
+                            str信息显示 = str日志输出;
+                            str编码输出 = str日志输出;
                             b出新帧 = true;
                         } else {
-                            builder日志.AppendLine(line);
+                            builder日志.AppendLine(str日志输出);
                         }
                     }
                 }
@@ -986,7 +989,7 @@ namespace FFX265_Batch_Converter {
             }
         }
 
-        void fx跳过HEVC转码文件移动( ) {
+        void fx跳过更高阶编码文件移动( ) {
             编码队列.ffmpeg主动移除结束(this);
             if (!Setting.b完成后删除源视频) {//删除源 = 同文件夹自动处理功能。
                 string str跳过转码 = $"{fi输入文件.DirectoryName}\\{name跳过文件夹}";
