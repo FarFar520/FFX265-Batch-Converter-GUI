@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -413,9 +412,9 @@ namespace FFX265_Batch_Converter {
             userX265Params.rd_refine = checkBox_rd_refine.Checked;
             userX265Params.rect = userX265Params.amp = checkBox_rect_amp.Checked;
             userX265Params.rc_lookahead_halfkeyint = checkBox_rc_lookahead_halfkeyint.Checked;
-            
-            userX265Params.oneThread = set_oneThread;
-            ffmpegParams.oneThread = set_oneThread;
+
+            userX265Params.oneThread = set单线程;
+            ffmpegParams.oneThread = set单线程;
 
             CheckState state = checkBox_single_sei.CheckState;
 
@@ -580,8 +579,8 @@ namespace FFX265_Batch_Converter {
         decimal d_last_qpmin = 0, d_last_qpmax = 69;
         private void checkBox_oneKey_CheckedChanged(object sender, EventArgs e) {
             bool show = checkBox_OneKey.Checked;
-            if (show) {//先记录设置，再赋予新值
 
+            if (show) {//先记录设置，再赋予新值
                 c_last_params_visible = panel_Params.Visible;
 
                 checkBox_autoCrop.Checked = true;
@@ -604,13 +603,7 @@ namespace FFX265_Batch_Converter {
                 panel_Params.Visible = true;
 
                 checkBox_mcstf.Checked = true;
-
-
-                numericUpDown_aq_mode.Value = 4;
             } else {
-
-                if (!c_last_mcstf) checkBox_mcstf.Checked = false;
-
                 checkBox_vfr.Checked = c_last_vfr;
 
                 checkBox_qp_min_max.Checked = c_last_qp_range;
@@ -626,6 +619,9 @@ namespace FFX265_Batch_Converter {
                 if (!c_last_params_visible)
                     panel_Params.Visible = false;
             }
+            set单线程 = !show;
+            labeloneThread_Click(null, null);
+
 
             checkBox_rd_refine.Checked = show;
             checkBox_rect_amp.Checked = show;
@@ -667,48 +663,8 @@ namespace FFX265_Batch_Converter {
             toolTipList.SetToolTip(checkBox_qp_min_max, qprange);
         }
 
-        bool set_oneThread = false, last_oneThread = false, c_last_mcstf = false;
 
-        private void checkBox_mcstf_Click(object sender, EventArgs e) {
-            c_last_mcstf = checkBox_mcstf.Checked;
-        }
 
-        private void checkBox_mcstf_CheckedChanged(object sender, EventArgs e) {
-            int iProcess = (int)numericUpDown_NumProcess.Value;
-
-            if (checkBox_mcstf.Checked) {
-                labeloneThread.Text = "单线多开";
-                numericUpDown_NumProcess.Maximum = NumberOfLogicalProcessors + 1;
-                iProcess = SingleThread_X265;
-                set_oneThread = true;
-            } else {
-                if (set_oneThread = last_oneThread) {
-                    labeloneThread.Text = "单线多开";
-
-                    numericUpDown_NumProcess.Maximum = NumberOfLogicalProcessors + 1;
-                    iProcess = SingleThread_X265;
-                } else {
-                    labeloneThread.Text = "多开";
-
-                    numericUpDown_NumProcess.Maximum = Max_MultiThread_X265 + 1;
-
-                    if (iProcess == SingleThread_X265) {
-                        iProcess = Max_MultiThread_X265;
-                    } else if (iProcess > Max_MultiThread_X265) {
-                        iProcess = Max_MultiThread_X265;
-                    }
-                }
-            }
-
-            if (numericUpDown_NumProcess.Maximum < iProcess)
-                numericUpDown_NumProcess.Maximum = iProcess + 1;
-
-            numericUpDown_NumProcess.Value = iProcess;
-        }
-
-        private void checkBox_mcstf_MouseClick(object sender, MouseEventArgs e) {
-            c_last_mcstf = checkBox_mcstf.Checked;
-        }
         int updateMS = 9999;
         private void checkBox_oneThread_MouseClick(object sender, MouseEventArgs e) {
 
@@ -733,7 +689,7 @@ namespace FFX265_Batch_Converter {
             bool show = checkBox_aq_mode.Checked;
             numericUpDown_aq_mode.Visible = show;
             if (show) {
-                numericUpDown_aq_mode.Value = 4;
+                numericUpDown_aq_mode.Value = 5;
             }
         }
 
@@ -746,22 +702,39 @@ namespace FFX265_Batch_Converter {
 3是码率向暗场偏移的方差AQ，也就是在2的基础上，让暗场的码率更高，因为x265的算法会导致暗场的码率不足，所以这个模式是必要的
 
 4是通过边缘检测自动调整方差，所以编码速率比3慢很多，但压缩率也会高很多，非常划算 作者：op200_Reek https://www.bilibili.com/read/cv34735585/ 出处：bilibili
+
+            --aq-mode
+<整数 0~3>据原画和 crf/abr 设定，以及码率不足时（crf<18/低码 abr）如何分配 qp。
+
+1：标准自适应量化，适合画面内容单调时使用
+2：并且启用 aq-variance，自动调整 aq-strength 强度（录像~电影以及 crf<17 推荐）
+3：并且在码率不够用时倾向保暗场（接受更明显的涂抹失真）
+4：并且码率不够用时更加倾向保纹理（接受平面上的涂抹失真，实验性，很慢）
+            出处https://iavoe.github.io/x265-web-tutorial/HTML/index.html
              */
             decimal aq_mode = numericUpDown_aq_mode.Value;
             string tip = string.Empty;
-            if (aq_mode == 4)
-                tip = " 边缘检测自动调整方差，提高压缩率";
+            if (aq_mode == 5)
+                tip = "--hevc-aq=true ，提高压缩率";
+            else if (aq_mode == 4)
+                tip = "--aq-mode=4 边缘检测，慢3倍，保纹理，提高压缩率";
             else if (aq_mode == 3)
-                tip = " 码率向暗场偏移的方差，提高暗场码率";
+                tip = "--aq-mode=3 码率向暗场偏移的方差，保暗场";
+            else if (aq_mode == 2)
+                tip = "--aq-mode=2 默认，录像~电影以及 crf<17 推荐";
+            else if (aq_mode == 1)
+                tip = "--aq-mode=1 标准自适应量化，适合画面内容单调时使用";
+            else if (aq_mode == 0)
+                tip = "--aq-mode=0 关闭";
 
-            toolTipList.SetToolTip(numericUpDown_aq_mode, "--aq-mode=" + aq_mode + tip);
+            toolTipList.SetToolTip(numericUpDown_aq_mode, tip);
         }
 
+        bool set单线程 = false;
         private void labeloneThread_Click(object sender, EventArgs e) {
             int iProcess = (int)numericUpDown_NumProcess.Value;
-
-            if (set_oneThread) {
-                last_oneThread = set_oneThread = false;
+            if (set单线程) {
+                set单线程 = false;
 
                 updateMS = 2222;
                 labeloneThread.Text = "多开";
@@ -777,7 +750,7 @@ namespace FFX265_Batch_Converter {
                     iProcess = Max_MultiThread_X265;
                 }
             } else {
-                last_oneThread = set_oneThread = true;
+                set单线程 = true;
 
                 updateMS = 9999;
                 labeloneThread.Text = "单线多开";
@@ -786,10 +759,6 @@ namespace FFX265_Batch_Converter {
 
                 if (iProcess == Min_MultiThread_X265 || iProcess == Max_MultiThread_X265)
                     iProcess = SingleThread_X265;
-
-                if (c_last_mcstf) {
-                    checkBox_mcstf.Checked = true;
-                }
             }
 
             if (numericUpDown_NumProcess.Maximum < iProcess) numericUpDown_NumProcess.Maximum = iProcess + 1;
@@ -1062,6 +1031,18 @@ namespace FFX265_Batch_Converter {
                 }
             }
         }
+
+        private void numericUpDown_NumProcess_MouseClick(object sender, MouseEventArgs e) {
+
+        }
+
+        private void numericUpDown_NumProcess_MouseClick(object sender, EventArgs e) {
+            decimal max = numericUpDown_NumProcess.Maximum;
+            if (max == numericUpDown_NumProcess.Value) {
+                numericUpDown_NumProcess.Value = numericUpDown_NumProcess.Maximum = max + 1;
+            }
+        }
+
         private void listBoxFolder_DoubleClick(object sender, EventArgs e) {
             string folder = listBoxFolder.SelectedItem.ToString( );
             DirectoryInfo directoryInfo = new DirectoryInfo(folder);
@@ -1138,7 +1119,7 @@ namespace FFX265_Batch_Converter {
 
         private void FormMain_Load(object sender, EventArgs e) {
             CPUNum( );
-            this.Text = "FFX265_Batch_Converter Ver." + Application.ProductVersion;
+            this.Text = "FFX265批量专压 Ver." + Application.ProductVersion;
         }
 
         private void FormMain_Activated(object sender, EventArgs e) {

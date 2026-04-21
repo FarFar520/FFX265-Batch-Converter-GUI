@@ -7,6 +7,7 @@ using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace FFX265_Batch_Converter {
     internal class RunFFmpeg {
@@ -18,23 +19,22 @@ namespace FFX265_Batch_Converter {
 
         public static readonly string[] sub带特效字幕 = { "ass", "ssa", "webvtt" }, sub文字字幕 = { "srt" };
 
-        Regex regexTBR = new Regex(@"(?<tbr>\d+(\.\d+)?) tbr", RegexOptions.IgnoreCase | RegexOptions.Compiled);//平均帧率
-        Regex regexFPS = new Regex(@"(?<fps>\d+(\.\d+)?) fps", RegexOptions.IgnoreCase | RegexOptions.Compiled);//播放帧率
+        public static Regex regexTBR = new Regex(@"(?<tbr>\d+(\.\d+)?) tbr", RegexOptions.IgnoreCase | RegexOptions.Compiled);//平均帧率
+        public static Regex regexFPS = new Regex(@"(?<fps>\d+(\.\d+)?) fps", RegexOptions.IgnoreCase | RegexOptions.Compiled);//播放帧率
 
-        Regex regex时长 = new Regex(@"Duration:\s*((?:\d{2}:){2,}\d{2}(?:\.\d+)?)", RegexOptions.IgnoreCase | RegexOptions.Compiled);//视频时长
+        public static Regex regex时长 = new Regex(@"Duration:\s*((?:(?:(?:(?:(?<D>\d+)\s*[\.:]\s*)?(?<H>\d+)\s*:\s*)?(?<M>\d+)\s*:\s*)?(?<S>\d+))?(?:\s*\.\s*(?<MS>\d+))?)", RegexOptions.IgnoreCase | RegexOptions.Compiled);//视频时长
         //Regex regexWH = new Regex(@", (?<w>[1-9]\d+)x(?<h>[1-9]\d+)\W+", RegexOptions.IgnoreCase | RegexOptions.Compiled);//视频分辨率
-        Regex regexWH = new Regex(@", (?<w>[1-9]\d+)x(?<h>[1-9]\d+)(?: \[SAR \d+:\d+ DAR (?<darw>\d+):(?<darh>\d+)\])?\W+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        Regex regexCrop = new Regex(@"crop=(?<w>\d+):(?<h>\d+):(?<x>\d+):(?<y>\d+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);//剪裁坐标
-        Regex regexTime = new Regex(@"time=(?<t>(?:\d{2}:)?\d{2}:\d{2}:\d{2}\.\d{2})", RegexOptions.Compiled);//编码进度
-        Regex regex隔行扫描 = new Regex(@"(top|bottom)\s+first", RegexOptions.IgnoreCase | RegexOptions.Compiled);//交错视频
+        public static Regex regexWH = new Regex(@", (?<w>[1-9]\d+)x(?<h>[1-9]\d+)(?: \[SAR \d+:\d+ DAR (?<darw>\d+):(?<darh>\d+)\])?\W+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex regexCrop = new Regex(@"crop=(?<w>\d+):(?<h>\d+):(?<x>\d+):(?<y>\d+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);//剪裁坐标
+        public static Regex regexTime = new Regex(@"time=\s*(\d+[\d:\.]+\d+)\s*", RegexOptions.IgnoreCase | RegexOptions.Compiled);//编码进度
+        public static Regex regex隔行扫描 = new Regex(@"(top|bottom)\s+first", RegexOptions.IgnoreCase | RegexOptions.Compiled);//交错视频
 
-        Regex regex视轨 = new Regex("Stream #0.+?Video: (?<vcode>[^,]+),(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        Regex regex音轨 = new Regex("Stream #0.+?Audio:(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        Regex regex字幕 = new Regex("Stream #0.+?Subtitle:(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex regex视轨 = new Regex("Stream #0.+?Video: (?<vcode>[^,]+),(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex regex音轨 = new Regex("Stream #0.+?Audio:(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex regex字幕 = new Regex("Stream #0.+?Subtitle:(.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        Regex regexP = new Regex(@"(?<=^|[\W_]\b)(\d{2,4}[pi]|\d{1,2}(?:\.\d)?K)(?=[\W_]|$\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-        Regex regexFFmpeg命令行中载入文件 = new Regex(@"(?:\s-i\s+""(?<file>[^""]+?)""\s+-[a-z]+\s+)|(?:\s-i\s+(?<file>[\S]+)\s+-[a-z]+\s+)", RegexOptions.IgnoreCase);
+        public static Regex regexP = new Regex(@"(?<=^|[\W_]\b)(\d{2,4}[pi]|\d{1,2}(?:\.\d)?K)(?=[\W_]|$\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        public static Regex regex日时分秒 = new Regex(@"(?<Day>\d+[\.:])?(?<Hour>\d{1,2})[:：](?<Min>\d{1,2})[:：](?<Sec>\d{1,2})(?:[\., ](?<MS>\d+))?", RegexOptions.Compiled);
 
         FileInfo _fi输入文件;
         public FileInfo fi输入文件 => _fi输入文件;
@@ -59,12 +59,15 @@ namespace FFX265_Batch_Converter {
 
         bool b可变帧率 = false, b发生缩放 = false, b畸变 = false, b发生自动剪裁 = false, b时间剪裁 = false, b跳过编码 = false, b保存日志 = true, b出新帧 = false, b隔行扫描 = false, b有音轨 = false, b有字幕 = false, b有视轨 = false, b硬字幕 = false;
 
-        string str线程, str剪裁参数, str缩放参数, str字幕 = string.Empty, str输出文件 = string.Empty, str日志类型 = string.Empty, str编码摘要 = string.Empty, str开工日志 = string.Empty;
+        string str剪裁参数, str缩放参数, str字幕 = string.Empty, str输出文件 = string.Empty, str日志类型 = string.Empty, str编码摘要 = string.Empty, str开工日志 = string.Empty;
+
+        public static  string str单线程解码 = "-threads 1 ", str单线程滤镜 = "-filter_threads 1 -filter_complex_threads 1";
+        public static string str软件标签 = $"-metadata encoding_tool=\"{Application.ProductName} {Application.ProductVersion}\"";
 
         string str路径_转码输出;
         string vcode = string.Empty;
 
-        string str信息显示 = string.Empty, str编码输出 = string.Empty,str日志输出=string.Empty;
+        string str信息显示 = string.Empty, str编码输出 = string.Empty, str日志输出 = string.Empty;
 
         string get输出Progressive {
             get {
@@ -114,9 +117,19 @@ namespace FFX265_Batch_Converter {
                         return fi输入文件.Name + "\r\n" + str日志输出;
                 } else b出新帧 = false;
 
-                Match mt = regexTime.Match(str编码输出);
-                if (mt.Success) {//可变帧率视频只能用时间来计算进度。
-                    span进度 = TimeSpan.Parse(mt.Groups["t"].Value); //进度是已编码时长，剪裁片头不影响进度时间。
+                string t = regexTime.Match(str编码输出).Groups[1].Value;
+                if (!string.IsNullOrEmpty(t)) {//可变帧率视频只能用时间来计算进度。
+                    if (!TimeSpan.TryParse(t, out span进度)) { //进度是已编码时长，剪裁片头不影响进度时间。
+                        Match mt日时分秒 = regex日时分秒.Match(t);
+                        if (mt日时分秒.Success) {
+                            if (!double.TryParse(mt日时分秒.Groups["Sec"].Value, out double Sec)) Sec = 0;
+                            if (int.TryParse(mt日时分秒.Groups["Day"].Value, out int day)) Sec += day + 86400;
+                            if (int.TryParse(mt日时分秒.Groups["Hour"].Value, out int hour)) Sec += hour * 3600;
+                            if (int.TryParse(mt日时分秒.Groups["Min"].Value, out int min)) Sec += min * 60;
+                            if (float.TryParse("0." + mt日时分秒.Groups["MS"].Value, out float ms)) Sec += ms;//ASS毫秒单位保留两位数字，整除100
+                            span进度 = TimeSpan.FromSeconds(Sec);
+                        }
+                    }
                 } else if (f编码帧 > 0) {
                     span进度 = TimeSpan.FromSeconds(f编码帧 / tbr_out);//转vfr时，会丢弃部分帧，算进度会偏少一丢丢。
                 }
@@ -127,9 +140,7 @@ namespace FFX265_Batch_Converter {
                 if (stopwatch.ElapsedMilliseconds > 0) {
                     TimeSpan ts预计 = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds / span进度.TotalMilliseconds * vTime.span编码.Subtract(span进度).TotalMilliseconds);
                     //ElapsedMilliseconds 长整数有丢失精度、溢出问题，需要使用双精度小数计算毫秒。
-
                     return str信息显示 = $"{pct:P2}{str预计剩余(ts预计)} {fi输入文件.Name}\r\n{str编码输出}";
-
                 } else {
                     return str信息显示 = $"{pct:P2} {fi输入文件.Name}\r\n{str编码输出}";
                 }
@@ -186,8 +197,6 @@ namespace FFX265_Batch_Converter {
             b可变帧率 = ffmpegParams.vfr;
             this.ffmpegParams = ffmpegParams;
             b单线程 = ffmpegParams.oneThread;
-
-            str线程 = b单线程 ? "-threads 1 -filter_threads 1 -filter_complex_threads 1 " : "";
         }
         public bool b后台等待(Process process) {
             try {
@@ -344,7 +353,7 @@ namespace FFX265_Batch_Converter {
             if (Setting.b跳过更高阶编码) {
                 if (!ffmpegParams.b_add_lavfi_set && ffmpegParams.crf > 0 && !userX265Params.keyintSet && !b隔行扫描 && !b发生自动剪裁 && !b发生缩放 && !b时间剪裁 && !b硬字幕 && !(b可变帧率 && !fi输入文件.Name.Contains("vfr"))) {
                     //挂了外部滤镜、固定了关键帧间距，转无损、恒定帧率转可变帧率 再次编码
-                    b跳过编码 = ( vcode.Contains("av1") || vcode.Contains("vvc1") || vcode.Contains("vvc") || vcode.Contains("avs3")); //vcode.Contains("265") || vcode.Contains("hevc") || vcode.Contains("hev1") || vcode.Contains("hvc1")
+                    b跳过编码 = (vcode.Contains("av1") || vcode.Contains("vvc1") || vcode.Contains("vvc") || vcode.Contains("avs3")); //vcode.Contains("265") || vcode.Contains("hevc") || vcode.Contains("hev1") || vcode.Contains("hvc1")
                 }
             } else if (!b有视轨) {
                 b跳过编码 = true;
@@ -476,37 +485,42 @@ namespace FFX265_Batch_Converter {
 
                 Match match时长 = regex时长.Match(str时长);
                 if (match时长.Success) {
-                    vTime.get编码时长(TimeSpan.Parse(match时长.Groups[1].Value));
+                    double Sec = 0;
+                    if (int.TryParse(match时长.Groups["D"].Value, out int day)) Sec += day * 86400;
+                    if (int.TryParse(match时长.Groups["H"].Value, out int Hour)) Sec += Hour * 3600;
+                    if (int.TryParse(match时长.Groups["M"].Value, out int Minute)) Sec += Minute * 60;
+                    if (int.TryParse(match时长.Groups["S"].Value, out int Second)) Sec += Second;
+                    if (int.TryParse(match时长.Groups["MS"].Value, out int MS)) Sec += 0.001 * MS;
+                    if (Sec > 0) {
+                        vTime.set编码时长(TimeSpan.FromSeconds(Sec));
+                    } else {
+                        if (TimeSpan.TryParse(match时长.Groups[1].Value, out TimeSpan ts))
+                            vTime.set编码时长(ts);
+                    }
                 }
                 b时间剪裁 = vTime.b剪裁片头 || vTime.b剪裁片尾;
             }
         }
         bool fx时长匹配(FileInfo fi, out TimeSpan span时长) {
-            span时长 = TimeSpan.Zero;
-            string exe = _ffprobe == string.Empty ? _ffmpeg : _ffprobe;
-            if (exe == string.Empty) exe = _ffmpeg;
-            using (Process process = new Process( )) {
-                process.StartInfo.FileName = exe;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.Arguments = $"-i \"{fi.Name}\"";
-                process.StartInfo.WorkingDirectory = fi.DirectoryName;
-                process.StartInfo.StandardErrorEncoding = Encoding.UTF8;
-                try {
-                    process.Start( );
-                } catch {
+            using (Process p = new Process( )) {
+                p.StartInfo.FileName = _ffprobe;
+                p.StartInfo.Arguments = "-show_entries format=duration -of default=noprint_wrappers=1:nokey=1 -v error \"" + fi.FullName + '"';
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardError = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                try { p.Start( ); } catch {
+                    span时长 = TimeSpan.Zero;
                     return false;
                 }
-                while (!process.StandardError.EndOfStream) {////Error opening input file
-                    string line = process.StandardError.ReadLine( ).TrimStart( );
-
-                    if (regex时长.IsMatch(line)) {
-                        span时长 = TimeSpan.Parse(regex时长.Match(line).Groups[1].Value);
-                        return true;
-                    }
-                }
+                if (double.TryParse(p.StandardOutput.ReadToEnd( ), out double sec)) {
+                    span时长 = TimeSpan.FromSeconds(sec);
+                    return true;
+                } else
+                    span时长 = TimeSpan.Zero;
             }
+
+
             return false;
         }
 
@@ -525,7 +539,7 @@ namespace FFX265_Batch_Converter {
             if (!b硬字幕) {
                 string str字幕渲染效果;
                 //str字幕渲染效果 = "force_style=FontName=Microsoft YaHei UI Bold,Outline=0.2,Shadow=0.25,Spacing=0.5";
-                str字幕渲染效果 = "force_style=FontName=阿里巴巴普惠体 3 75 SemiBold,FontSize=20,Outline=0.2,Shadow=0.25,Spacing=0.5";
+                str字幕渲染效果 = "force_style=FontName=阿里巴巴普惠体 3 75 SemiBold,FontSize=22.5,Outline=0.2,Shadow=0.25,Spacing=0.5,MarginV=12";
                 for (int i = 0; i < sub文字字幕.Length; i++) {
                     string subTitle = string.Format("{0}\\{1}.{2}", fi输入文件.DirectoryName, str无后缀文件名, sub文字字幕[i]);
                     if (File.Exists(subTitle)) {
@@ -647,7 +661,7 @@ namespace FFX265_Batch_Converter {
                 process.StartInfo.StandardErrorEncoding = Encoding.UTF8;
                 process.StartInfo.WorkingDirectory = fi输入文件.DirectoryName;
 
-                process.StartInfo.Arguments = $"{str线程}-ss {ss} -i \"{fi输入文件.Name}\" -t {t} -vf cropdetect=round={userX265Params.round} -f null -an /dev/null";
+                process.StartInfo.Arguments = $"-ss {ss} -i \"{fi输入文件.Name}\" -t {t} -vf cropdetect=round={userX265Params.round} -f null -an /dev/null";
 
                 try {
                     process.Start( );//启动程序
@@ -663,7 +677,6 @@ namespace FFX265_Batch_Converter {
                 }
             }
         }
-
 
         string fx参数拼接( ) {
             string g = (userX265Params.keyintMax || keyint == userX265Params.def_keyint || keyint < 1) ? string.Empty : string.Format(" -g {0}", ffmpegParams.crf == 0 ? 1 : keyint);
@@ -724,7 +737,6 @@ namespace FFX265_Batch_Converter {
             if (ffmpegParams.vfr) str编码摘要 += ".vfr";
             if (b硬字幕) str编码摘要 += ".硬字幕";
 
-
             string outputName = fi输入文件.Name;
             if (b发生缩放) {
                 outputName = regexP.Replace(outputName, get输出Progressive);
@@ -735,7 +747,7 @@ namespace FFX265_Batch_Converter {
             string str载入 = $"-i \"{fi输入文件.Name}\"";
             string str参数 = $"{vTime.getCMD}{arg}";
 
-            string str完整命令行 = $"{str线程}{str载入} {str参数} \"正在转码……\\{str输出文件}\"";
+            string str完整命令行 = $"{str单线程解码}{str载入} {str参数} {str软件标签} \"正在转码……\\{str输出文件}\" {str单线程滤镜}";
 
             // -ss 写在 -i之前ffpmeg用关键帧跳转，启动速度较快，结果开头会停滞几帧。存在关键帧时间戳到输入时间戳的空白。
             //-ss写在-i之后，会逐帧解码到输入时间戳，精确到毫秒分割。
@@ -749,20 +761,18 @@ namespace FFX265_Batch_Converter {
             vf = string.Empty;
             List<string> listFilter = new List<string>( );
 
-            if (Setting.b自动反交错 && b隔行扫描) {
-                listFilter.Add("bwdif=1:-1:1");//交错视频，逐帧反交错。
-                //listFilter.Add("bwdif=0:-1:0");//交错视频，每场混合为一帧。
-                str信息显示 = "反交错帧：bwdif=1:-1:1";
-                builder日志.AppendLine(str信息显示);
-            }
-
             if (b发生自动剪裁) {
                 str信息显示 = "自动剪裁：" + str剪裁参数;
                 builder日志.AppendLine(str信息显示);
                 listFilter.Add(str剪裁参数);
             }
 
-
+            if (Setting.b自动反交错 && b隔行扫描) {
+                listFilter.Add("bwdif=1:-1:1");//交错视频，逐帧反交错。
+                //listFilter.Add("bwdif=0:-1:0");//交错视频，每场混合为一帧。
+                str信息显示 = "反交错帧：bwdif=1:-1:1";
+                builder日志.AppendLine(str信息显示);
+            }
 
             if (b畸变) {
                 if (b发生缩放) {
@@ -783,16 +793,13 @@ namespace FFX265_Batch_Converter {
                     listFilter.Add(str缩放参数);
                 }
             }
+            if (ffmpegParams.b_add_lavfi && !string.IsNullOrEmpty(ffmpegParams.str_add_lavfi)) {
+                listFilter.Add(ffmpegParams.str_add_lavfi);
+            }
 
             if (b可变帧率) {
                 listFilter.Add("mpdecimate");//把检查重复帧功能放到最后，比较最终画面
             }//可能存在长时间固定相同帧，只有时间码的空帧无法渲染硬字幕。
-
-            //listFilter.Add("unsharp=5:5:-0.01:5:5:0.0");//反锐化滤镜
-
-            if (ffmpegParams.b_add_lavfi && !string.IsNullOrEmpty(ffmpegParams.str_add_lavfi)) {
-                listFilter.Add(ffmpegParams.str_add_lavfi);
-            }
 
             if (listFilter.Count > 0) {
                 vf = " -lavfi \"" + listFilter[0];
@@ -866,6 +873,7 @@ namespace FFX265_Batch_Converter {
                     str开工日志 = $"{fi输入文件.DirectoryName}\\{name工作文件夹}\\{str输出文件}.log";
                     fx工作日志( );
                 }
+                string str错误之前的编码输出 = string.Empty;
                 while (!process.StandardError.EndOfStream) {
                     string str日志输出 = process.StandardError.ReadLine( );//编码过程中的信息可以刷新到程序显示。
                     if (str日志输出 != null) {
@@ -876,6 +884,11 @@ namespace FFX265_Batch_Converter {
                             str编码输出 = str日志输出;
                             b出新帧 = true;
                         } else {
+                            if (str错误之前的编码输出 != str编码输出) {
+                                str错误之前的编码输出 = str编码输出;
+                                builder日志.AppendLine( ).AppendLine(str编码输出);
+                            }
+
                             builder日志.AppendLine(str日志输出);
                         }
                     }
@@ -922,7 +935,23 @@ namespace FFX265_Batch_Converter {
                 if (b判断时长) {
                     Match mt = regexTime.Match(str编码输出);
                     if (mt.Success) {//可变帧率视频只能用时间来计算进度。
-                        span进度 = TimeSpan.Parse(mt.Groups["t"].Value); //进度是已编码时长，剪裁片头不影响进度时间。
+                        string time = mt.Groups["t"].Value;
+
+                        if (!TimeSpan.TryParse(time, out span进度)) {
+                            Match match时长 = regex时长.Match(time);
+                            if (match时长.Success) {
+                                double Sec = 0;
+                                if (int.TryParse(match时长.Groups["D"].Value, out int day)) Sec += day * 86400;
+                                if (int.TryParse(match时长.Groups["H"].Value, out int Hour)) Sec += Hour * 3600;
+                                if (int.TryParse(match时长.Groups["M"].Value, out int Minute)) Sec += Minute * 60;
+                                if (int.TryParse(match时长.Groups["S"].Value, out int Second)) Sec += Second;
+                                if (int.TryParse(match时长.Groups["MS"].Value, out int MS)) Sec += 0.001 * MS;
+                                if (Sec > 0) {
+                                    span进度 = TimeSpan.FromSeconds(Sec);
+                                }
+                            }
+                        }
+                        //span进度 = TimeSpan.Parse(); //进度是已编码时长，剪裁片头不影响进度时间。
                         if (span进度.TotalSeconds + 10 >= vTime.span编码.TotalSeconds) b时长不变 = true;
                     }
                     if (!b时长不变) {
@@ -956,7 +985,6 @@ namespace FFX265_Batch_Converter {
                         } catch (Exception e) {
                             builder日志.AppendLine("移动完成文件失败： ").Append(e.Message);
                         }
-
 
                         string str源 = $"{fi输入文件.DirectoryName}\\{name源文件夹}";
                         if (!Directory.Exists(str源)) Directory.CreateDirectory(str源);

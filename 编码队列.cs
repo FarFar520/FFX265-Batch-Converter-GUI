@@ -18,7 +18,6 @@ namespace FFX265_Batch_Converter {
 
         static object obj增删排锁 = new object( );
 
-
         public static AutoResetEvent Event编码信号 = new AutoResetEvent(false);
 
         public static 截取时间表 x截取时间表 = new 截取时间表( );
@@ -96,7 +95,6 @@ namespace FFX265_Batch_Converter {
                 return string.Empty;
             }
         }
-
 
         public static bool b还有本次任务( ) {
             if (_ffmpegs.Count > 0) {

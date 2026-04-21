@@ -241,7 +241,8 @@ namespace FFX265_Batch_Converter {
             //UTF - 8
             if (fileBytes.Length == 3) {
                 if ((fileBytes[0] == 34 && fileBytes[1] == 232 && fileBytes[2] == 167) ||
-                    (fileBytes[0] == 239 && fileBytes[1] == 187 && fileBytes[2] == 191)) {
+                    (fileBytes[0] == 239 && fileBytes[1] == 187 && fileBytes[2] == 191) ||
+                    (fileBytes[0] == 229 && fileBytes[1] == 186 && fileBytes[2] == 143)) {
                     encoding = Encoding.UTF8;
                 } else if (fileBytes[0] == 34 && fileBytes[1] == 202 && fileBytes[2] == 211) {
                     encoding = Encoding.GetEncoding("GB2312");
@@ -286,7 +287,7 @@ namespace FFX265_Batch_Converter {
             }
         }
 
-        public TimeSpan get编码时长(TimeSpan span视频时长) {
+        public TimeSpan set编码时长(TimeSpan span视频时长) {
             this.span视频 = span视频时长;
 
             if (time设置开始 > TimeSpan.Zero && time设置开始 < span视频时长) {

@@ -65,7 +65,7 @@ namespace FFX265_Batch_Converter {
             ;
 
 
-        int _aq_mode = 4;
+        int _aq_mode = 5;
         int _nr_intra = 0, _nr_inter = 0, _bframes = 0;
 
         float _qp_min = 0, _qp_max = 69;
@@ -96,7 +96,7 @@ namespace FFX265_Batch_Converter {
         }
         public int aq_mode {
             set {
-                if (value > 1 && value < 5)
+                if (value > -1 && value <= 5)
                     _aq_mode = value;
             }
         }
@@ -143,7 +143,6 @@ namespace FFX265_Batch_Converter {
             }
         }
 
-
         public string getParams(int keyint, float crf, double tbr_out) {
 
             if (crf == 0) {
@@ -177,8 +176,12 @@ namespace FFX265_Batch_Converter {
                 stringBuilder.AppendFormat(":rc-lookahead={0}", lookahead > 250 ? 250 : lookahead);//完整版x265教程 2024.59.6 by Avoe 建议的搜索范围扩大为关键帧间隔的一半
             }
 
-            if (is_aq_mode) stringBuilder.AppendFormat(":aq-mode={0}", _aq_mode);
-
+            if (is_aq_mode) {
+                if (_aq_mode < 5)
+                    stringBuilder.AppendFormat(":aq-mode={0}", _aq_mode);
+                else
+                    stringBuilder.Append(":no-hevc-aq=0");
+            }
             if (hist_scenecut) stringBuilder.Append(":hist-scenecut=1");
             if (fades) stringBuilder.Append(":fades=1");
 
